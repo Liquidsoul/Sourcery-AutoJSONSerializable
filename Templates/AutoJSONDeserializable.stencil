@@ -2,12 +2,17 @@
 
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 {% for type in types.implementing.AutoJSONDeserializable %}
+
 // MARK: - {{ type.name }} AutoJSONDeserializable
 extension {{ type.name }}: JSONDeserializable {
 {% if type.supertype.implements.AutoJSONDeserializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
     {{ type.accessLevel }} init?(JSONObject: [String: Any]) {
         {% for variable in type.storedVariables %}
+        {% if variable.annotations.keyName %}
+        guard let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName }}"] as? {{ variable.typeName }} else { return nil }
+        {% else %}
         guard let {{ variable.name }} = JSONObject["{{ variable.name }}"] as? {{ variable.typeName }} else { return nil }
+        {% endif %}
         self.{{ variable.name }} = {{ variable.name }}
         {% endfor %}
     }

@@ -11,4 +11,14 @@ class AutoJSONDeserializableTests: XCTestCase {
         }
         XCTAssertEqual(object.name, "value")
     }
+
+    func test_singleAnnotatedPropertyDeserialization() {
+        let jsonObject: [String: Any] = ["label": "value"]
+
+        guard let object = SinglePropertyWithKeyPathAnnotation(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.name, "value")
+    }
 }

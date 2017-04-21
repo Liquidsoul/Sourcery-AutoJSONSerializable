@@ -7,6 +7,7 @@ import XCTest
 extension AutoJSONDeserializableTests {
   static var allTests = [
     ("test_singlePropertyDeserialization", test_singlePropertyDeserialization),
+    ("test_singleAnnotatedPropertyDeserialization", test_singleAnnotatedPropertyDeserialization),
   ]
 }
 
