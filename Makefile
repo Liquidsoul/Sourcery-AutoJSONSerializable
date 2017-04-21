@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := test
+
 SOURCERY=$(PWD)/.build/debug/sourcery
 
 build:
