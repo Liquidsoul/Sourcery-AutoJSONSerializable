@@ -9,6 +9,7 @@ extension AutoJSONDeserializableTests {
     ("test_singlePropertyDeserialization", test_singlePropertyDeserialization),
     ("test_singleAnnotatedPropertyDeserialization", test_singleAnnotatedPropertyDeserialization),
     ("test_OptionalPropertyDeserialization", test_OptionalPropertyDeserialization),
+    ("test_JSONDeserializablePropertyDeserialization", test_JSONDeserializablePropertyDeserialization),
   ]
 }
 
