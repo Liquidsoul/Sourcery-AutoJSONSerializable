@@ -6,3 +6,4 @@ output:
   .
 args:
   testimports: '@testable import AutoJSONDeserializableTests'
+prune: true

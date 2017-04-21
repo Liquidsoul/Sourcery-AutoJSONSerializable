@@ -4,5 +4,4 @@ templates:
   - Templates/
 output:
   Sources/AutoJSONDeserializable/Generated/
-args:
-  prune: true
+prune: true
