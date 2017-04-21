@@ -22,6 +22,22 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.name, "value")
     }
 
+    func test_MultiTypesPropertiesDeserialization() {
+        let jsonObject: [String: Any] = [
+          "string": "value",
+          "integer": 42,
+          "double": 66.6
+        ]
+
+        guard let object = MultiTypesProperties(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.string, "value")
+        XCTAssertEqual(object.integer, 42)
+        XCTAssertEqual(object.double, 66.6)
+    }
+
     func test_OptionalPropertyDeserialization() {
         let jsonObject: [String: Any] = ["name": NSNull()]
 
