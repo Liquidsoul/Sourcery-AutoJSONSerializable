@@ -51,7 +51,8 @@ class AutoJSONDeserializableTests: XCTestCase {
     func test_JSONDeserializablePropertyDeserialization() {
         let jsonObject: [String: Any] = [
           "entity": ["name": "value"],
-          "optionalEntity": ["name": "optionalValue"]
+          "optionalEntity": ["name": "optionalValue"],
+          "annotated_entity": ["name": "annotatedValue"]
         ]
 
         guard let object = JSONDeserializableProperty(JSONObject: jsonObject) else {
@@ -60,6 +61,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         }
         XCTAssertEqual(object.entity.name, "value")
         XCTAssertEqual(object.optionalEntity?.name, "optionalValue")
+        XCTAssertEqual(object.annotatedEntity.name, "annotatedValue")
         XCTAssertNil(object.nilEntity)
     }
 }

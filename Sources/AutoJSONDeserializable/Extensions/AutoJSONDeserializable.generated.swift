@@ -14,6 +14,8 @@ extension JSONDeserializableProperty: JSONDeserializable {
         self.optionalEntity = optionalEntity
         let nilEntity = (JSONObject["nilEntity"] as? [String: Any]).flatMap(Entity.init(JSONObject:))
         self.nilEntity = nilEntity
+        guard let annotatedEntity = (JSONObject["annotated_entity"] as? [String: Any]).flatMap(Entity.init(JSONObject:)) else { return nil }
+        self.annotatedEntity = annotatedEntity
     }
 }
 
