@@ -8,10 +8,18 @@ extension {{ type.name }}: JSONDeserializable {
 {% if type.supertype.implements.AutoJSONDeserializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
     {{ type.accessLevel }} init?(JSONObject: [String: Any]) {
         {% for variable in type.storedVariables %}
-        {% if variable.annotations.keyName %}
-        guard let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName }}"] as? {{ variable.typeName }} else { return nil }
+        {% if variable.isOptional %}
+          {% if variable.annotations.keyName %}
+        let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName }}"] as? {{ variable.unwrappedTypeName }}
+          {% else %}
+        let {{ variable.name }} = JSONObject["{{ variable.name }}"] as? {{ variable.unwrappedTypeName }}
+          {% endif %}
         {% else %}
+          {% if variable.annotations.keyName %}
+        guard let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName }}"] as? {{ variable.typeName }} else { return nil }
+          {% else %}
         guard let {{ variable.name }} = JSONObject["{{ variable.name }}"] as? {{ variable.typeName }} else { return nil }
+          {% endif %}
         {% endif %}
         self.{{ variable.name }} = {{ variable.name }}
         {% endfor %}

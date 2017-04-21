@@ -8,6 +8,7 @@ extension AutoJSONDeserializableTests {
   static var allTests = [
     ("test_singlePropertyDeserialization", test_singlePropertyDeserialization),
     ("test_singleAnnotatedPropertyDeserialization", test_singleAnnotatedPropertyDeserialization),
+    ("test_OptionalPropertyDeserialization", test_OptionalPropertyDeserialization),
   ]
 }
 

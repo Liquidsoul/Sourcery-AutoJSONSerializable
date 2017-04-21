@@ -5,6 +5,14 @@
 
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 
+// MARK: - OptionalProperty AutoJSONDeserializable
+extension OptionalProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        let name = JSONObject["name"] as? String
+        self.name = name
+    }
+}
+
 // MARK: - SinglePropertyNoAnnotation AutoJSONDeserializable
 extension SinglePropertyNoAnnotation: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {

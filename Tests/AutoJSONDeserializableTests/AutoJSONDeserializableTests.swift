@@ -21,4 +21,14 @@ class AutoJSONDeserializableTests: XCTestCase {
         }
         XCTAssertEqual(object.name, "value")
     }
+
+    func test_OptionalPropertyDeserialization() {
+        let jsonObject: [String: Any] = ["name": NSNull()]
+
+        guard let object = OptionalProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertNil(object.name)
+    }
 }
