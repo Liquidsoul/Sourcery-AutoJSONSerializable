@@ -1,7 +1,7 @@
 import XCTest
 @testable import AutoJSONDeserializable
 
-class AutoJSONSerializableTests: XCTestCase {
+class AutoJSONDeserializableTests: XCTestCase {
     func test_singlePropertyDeserialization() {
         let jsonObject: [String: Any] = ["name": "value"]
 
