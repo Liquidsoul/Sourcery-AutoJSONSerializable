@@ -1,0 +1,8 @@
+sources:
+  - .
+templates:
+  - .templates/LinuxMain.stencil
+output:
+  .
+args:
+  testimports: '@testable import AutoJSONDeserializableTests'

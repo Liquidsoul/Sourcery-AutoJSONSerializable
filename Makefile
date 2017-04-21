@@ -1,13 +1,16 @@
+SOURCERY=$(PWD)/.build/debug/sourcery
+
 build:
 	swift build
 
 sourcery: build
-	.build/debug/sourcery
+	$(SOURCERY)
 
 live: build
-	.build/debug/sourcery --watch
+	$(SOURCERY) --watch
 
 test: sourcery
+	cd Tests; $(SOURCERY)
 	swift test
 
 clean:

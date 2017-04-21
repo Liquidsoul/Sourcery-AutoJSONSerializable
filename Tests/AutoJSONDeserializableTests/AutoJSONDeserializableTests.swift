@@ -11,8 +11,4 @@ class AutoJSONDeserializableTests: XCTestCase {
         }
         XCTAssertEqual(object.name, "value")
     }
-
-     static var allTests = [
-       ("test_singlePropertyDeserialization", test_singlePropertyDeserialization),
-     ]
 }
