@@ -52,7 +52,8 @@ class AutoJSONDeserializableTests: XCTestCase {
         let jsonObject: [String: Any] = [
           "entity": ["name": "value"],
           "optionalEntity": ["name": "optionalValue"],
-          "annotated_entity": ["name": "annotatedValue"]
+          "annotated_entity": ["name": "annotatedValue"],
+          "optional_annotated_entity": ["name": "optionalAnnotatedValue"]
         ]
 
         guard let object = JSONDeserializableProperty(JSONObject: jsonObject) else {
@@ -62,6 +63,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.entity.name, "value")
         XCTAssertEqual(object.optionalEntity?.name, "optionalValue")
         XCTAssertEqual(object.annotatedEntity.name, "annotatedValue")
+        XCTAssertEqual(object.optionalAnnotatedEntity?.name, "optionalAnnotatedValue")
         XCTAssertNil(object.nilEntity)
     }
 }
