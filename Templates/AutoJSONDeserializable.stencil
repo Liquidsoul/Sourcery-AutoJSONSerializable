@@ -1,0 +1,17 @@
+// swiftlint:disable file_length
+
+// MARK: - AutoJSONDeserializable for classes, protocols, structs
+{% for type in types.implementing.AutoJSONDeserializable %}
+// MARK: - {{ type.name }} AutoJSONDeserializable
+extension {{ type.name }}: JSONDeserializable {
+{% if type.supertype.implements.AutoJSONDeserializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
+    {{ type.accessLevel }} init?(JSONObject: [String: Any]) {
+        {% for variable in type.storedVariables %}
+        guard let {{ variable.name }} = JSONObject["{{ variable.name }}"] as? {{ variable.typeName }} else { return nil }
+        self.{{ variable.name }} = {{ variable.name }}
+        {% endfor %}
+    }
+}
+{% endfor %}
+
+// MARK: -
