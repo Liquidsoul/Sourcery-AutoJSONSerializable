@@ -1,6 +1,9 @@
 // Generated using Sourcery 0.6.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// swiftlint:disable file_length
+// swiftlint:disable line_length
+// swiftlint:disable trailing_comma
 import XCTest
 @testable import AutoJSONDeserializableTests
 
@@ -13,7 +16,6 @@ extension AutoJSONDeserializableTests {
     ("test_JSONDeserializablePropertyDeserialization", test_JSONDeserializablePropertyDeserialization),
   ]
 }
-
 
 XCTMain([
   testCase(AutoJSONDeserializableTests.allTests),

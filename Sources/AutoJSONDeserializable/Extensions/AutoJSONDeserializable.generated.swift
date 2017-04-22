@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 // swiftlint:disable file_length
+// swiftlint:disable line_length
 
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 
