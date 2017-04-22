@@ -1,9 +1,9 @@
 .DEFAULT_GOAL := test
 
-SOURCERY=$(PWD)/.build/debug/sourcery
+SOURCERY=$(PWD)/.build/release/sourcery
 
 $(SOURCERY):
-	swift build
+	swift build -c release
 
 sourcery: $(SOURCERY)
 	$(SOURCERY)
