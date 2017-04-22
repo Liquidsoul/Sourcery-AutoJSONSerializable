@@ -8,17 +8,13 @@
 extension {{ type.name }}: JSONDeserializable {
 {% if type.supertype.implements.AutoJSONDeserializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
     {{ type.accessLevel }} init?(JSONObject: [String: Any]) {
+        {% macro Optional arg %}guard {{ arg }} else { return nil }{% endmacro %}
         {% for variable in type.storedVariables %}
-        {% ifnot variable.isOptional %}
-        guard
-        {% endif %}
-        {% if variable.type.implements.AutoJSONDeserializable %}
-        let {{ variable.name }} = (JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? [String: Any]).flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:))
+        {% set Assignment %}{% if variable.type.implements.AutoJSONDeserializable %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? [String: Any]).flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){% else %}let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? {{ variable.unwrappedTypeName }}{% endif %}{% endset %}
+        {% if variable.isOptional %}
+        {{ Assignment }}
         {% else %}
-        let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? {{ variable.unwrappedTypeName }}
-        {% endif %}
-        {% ifnot variable.isOptional %}
-        else { return nil }
+        {% call Optional Assignment %}
         {% endif %}
         self.{{ variable.name }} = {{ variable.name }}
         {% endfor %}
