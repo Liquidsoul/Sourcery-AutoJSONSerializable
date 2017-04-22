@@ -2,13 +2,13 @@
 
 SOURCERY=$(PWD)/.build/debug/sourcery
 
-build:
+$(SOURCERY):
 	swift build
 
-sourcery: build
+sourcery: $(SOURCERY)
 	$(SOURCERY)
 
-live: build
+live: $(SOURCERY)
 	$(SOURCERY) --watch
 
 test: sourcery
@@ -22,4 +22,4 @@ xcode: sourcery
 	swift package generate-xcodeproj
 	open AutoJSONSerializable.xcodeproj
 
-.PHONY: build sourcery live test clean xcode
+.PHONY: sourcery live test clean xcode
