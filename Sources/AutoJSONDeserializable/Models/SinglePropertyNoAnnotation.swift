@@ -1,3 +1,3 @@
-struct SinglePropertyNoAnnotation: AutoJSONDeserializable {
+struct SinglePropertyNoAnnotation: AutoJSONDeserializable, AutoJSONSerializable {
     let name: String
 }

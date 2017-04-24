@@ -1,0 +1,23 @@
+// swiftlint:disable file_length
+// swiftlint:disable line_length
+
+import Foundation
+
+// MARK: - AutoJSONSerializable for classes, protocols, structs
+{% for type in types.implementing.AutoJSONSerializable %}
+
+// MARK: - {{ type.name }} AutoJSONSerializable
+extension {{ type.name }}: JSONSerializable {
+{% if type.supertype.implements.AutoJSONSerializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONSerializable {% endif %}
+    {{ type.accessLevel }} func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        {% for variable in type.storedVariables %}
+        let {{ variable.name }} = self.{{ variable.name }}{% if variable.type.implements.AutoJSONSerializable %}{% if variable.isOptional %}?{%endif%}.toJSONObject(){% else %}{%if variable.unwrappedTypeName == "Date" %}{% if variable.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %}
+        jsonObject["{{ variable.annotations.keyName|default:variable.name }}"] = {{ variable.name }}
+        {% endfor %}
+        return jsonObject
+    }
+}
+{% endfor %}
+
+// MARK: -

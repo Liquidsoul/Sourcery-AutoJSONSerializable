@@ -17,7 +17,18 @@ extension AutoJSONDeserializableTests {
     ("test_DatePropertyDeserialization", test_DatePropertyDeserialization),
   ]
 }
+extension AutoJSONSerializableTests {
+  static var allTests = [
+    ("test_singlePropertySerialization", test_singlePropertySerialization),
+    ("test_singleAnnotatedPropertySerialization", test_singleAnnotatedPropertySerialization),
+    ("test_MultiTypesPropertiesSerialization", test_MultiTypesPropertiesSerialization),
+    ("test_OptionalPropertySerialization", test_OptionalPropertySerialization),
+    ("test_JSONSerializablePropertySerialization", test_JSONSerializablePropertySerialization),
+    ("test_DatePropertySerialization", test_DatePropertySerialization),
+  ]
+}
 
 XCTMain([
   testCase(AutoJSONDeserializableTests.allTests),
+  testCase(AutoJSONSerializableTests.allTests),
 ])

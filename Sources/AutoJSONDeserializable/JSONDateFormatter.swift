@@ -9,6 +9,14 @@ enum JSONDateFormatter {
         }
     }
 
+    static func string(from date: Date) -> String {
+        if #available(iOS 10.0, macOS 10.12, *) {
+            return isoDateFormatter.string(from: date)
+        } else {
+            return dateFormatter.string(from: date)
+        }
+    }
+
     @available(iOS 10.0, macOS 10.12, *)
     private static let isoDateFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
@@ -22,4 +30,10 @@ enum JSONDateFormatter {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         return formatter
     }()
+}
+
+extension Date {
+    func iso8601String() -> String {
+        return JSONDateFormatter.string(from: self)
+    }
 }
