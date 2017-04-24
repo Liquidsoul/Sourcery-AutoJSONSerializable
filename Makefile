@@ -30,7 +30,15 @@ xcode: sourcery
 	swift package generate-xcodeproj
 	open AutoJSONSerialization.xcodeproj
 
+XCODEFLAGS=-workspace 'AutoJSONSerialization.xcodeproj/project.xcworkspace' \
+				-scheme 'AutoJSONSerialization' \
+				-enableCodeCoverage YES
+
+ci: install test
+	swift package generate-xcodeproj
+	xcodebuild $(XCODEFLAGS) test
+
 $(SOURCERY):
 	swift build -c release
 
-.PHONY: deps sourcery watch test clean xcode
+.PHONY: deps sourcery watch test clean xcode ci
