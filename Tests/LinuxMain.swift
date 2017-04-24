@@ -5,7 +5,7 @@
 // swiftlint:disable line_length
 // swiftlint:disable trailing_comma
 import XCTest
-@testable import AutoJSONDeserializableTests
+@testable import AutoJSONSerializationTests
 
 extension AutoJSONDeserializableTests {
   static var allTests = [

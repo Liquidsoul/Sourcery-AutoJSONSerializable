@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "AutoJSONSerializable",
+  name: "AutoJSONSerialization",
   dependencies: [
     .Package(url: "https://github.com/krzysztofzablocki/Sourcery.git", majorVersion: 0, minor: 6)
   ]

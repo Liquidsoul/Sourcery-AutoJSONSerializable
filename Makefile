@@ -28,7 +28,7 @@ clean:
 # This will lacks some build steps like Sourcery and Swiftlint
 xcode: sourcery
 	swift package generate-xcodeproj
-	open AutoJSONSerializable.xcodeproj
+	open AutoJSONSerialization.xcodeproj
 
 $(SOURCERY):
 	swift build -c release

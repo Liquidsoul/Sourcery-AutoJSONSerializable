@@ -3,5 +3,5 @@ sources:
 templates:
   - Templates/
 output:
-  Sources/AutoJSONDeserializable/Extensions/
+  Sources/AutoJSONSerialization/Extensions/
 prune: true

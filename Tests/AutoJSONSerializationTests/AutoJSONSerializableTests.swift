@@ -1,5 +1,5 @@
 import XCTest
-@testable import AutoJSONDeserializable
+@testable import AutoJSONSerialization
 
 class AutoJSONSerializableTests: XCTestCase {
     func test_singlePropertySerialization() {
