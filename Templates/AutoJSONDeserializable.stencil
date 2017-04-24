@@ -1,6 +1,8 @@
 // swiftlint:disable file_length
 // swiftlint:disable line_length
 
+import Foundation
+
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 {% for type in types.implementing.AutoJSONDeserializable %}
 
@@ -10,7 +12,7 @@ extension {{ type.name }}: JSONDeserializable {
     {{ type.accessLevel }} init?(JSONObject: [String: Any]) {
         {% macro Optional arg %}guard {{ arg }} else { return nil }{% endmacro %}
         {% for variable in type.storedVariables %}
-        {% set Assignment %}{% if variable.type.implements.AutoJSONDeserializable %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? [String: Any]).flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){% else %}let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? {{ variable.unwrappedTypeName }}{% endif %}{% endset %}
+        {% set Assignment %}{% if variable.type.implements.AutoJSONDeserializable %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? [String: Any]).flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){% else %}{% if variable.unwrappedTypeName == "Date" %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? String).flatMap(JSONDateFormatter.date(from:)){% else %}let {{ variable.name }} = JSONObject["{{ variable.annotations.keyName|default:variable.name }}"] as? {{ variable.unwrappedTypeName }}{% endif %}{% endif %}{% endset %}
         {% if variable.isOptional %}
         {{ Assignment }}
         {% else %}

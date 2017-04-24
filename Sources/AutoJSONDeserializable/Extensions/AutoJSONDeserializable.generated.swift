@@ -4,7 +4,19 @@
 // swiftlint:disable file_length
 // swiftlint:disable line_length
 
+import Foundation
+
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
+
+// MARK: - DateProperty AutoJSONDeserializable
+extension DateProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let date = (JSONObject["date"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.date = date
+        let optionalDate = (JSONObject["optional_date"] as? String).flatMap(JSONDateFormatter.date(from:))
+        self.optionalDate = optionalDate
+    }
+}
 
 // MARK: - JSONDeserializableProperty AutoJSONDeserializable
 extension JSONDeserializableProperty: JSONDeserializable {

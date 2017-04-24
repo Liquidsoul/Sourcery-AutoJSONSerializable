@@ -66,4 +66,19 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.optionalAnnotatedEntity?.name, "optionalAnnotatedValue")
         XCTAssertNil(object.nilEntity)
     }
+
+    func test_DatePropertyDeserialization() {
+        let jsonObject: [String: Any] = [
+          "date": "1985-04-12T23:20:50Z",
+          "optional_date": "1996-12-19T16:39:57-08:00"
+        ]
+
+        guard let object = DateProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.date, Date(timeIntervalSince1970: 482196050))
+        XCTAssertEqual(object.optionalDate, Date(timeIntervalSince1970: 851042397))
+    }
+
 }

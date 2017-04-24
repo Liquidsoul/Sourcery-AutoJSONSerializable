@@ -14,6 +14,7 @@ extension AutoJSONDeserializableTests {
     ("test_MultiTypesPropertiesDeserialization", test_MultiTypesPropertiesDeserialization),
     ("test_OptionalPropertyDeserialization", test_OptionalPropertyDeserialization),
     ("test_JSONDeserializablePropertyDeserialization", test_JSONDeserializablePropertyDeserialization),
+    ("test_DatePropertyDeserialization", test_DatePropertyDeserialization),
   ]
 }
 
