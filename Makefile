@@ -30,7 +30,7 @@ xcode: sourcery
 	swift package generate-xcodeproj
 	open AutoJSONSerialization.xcodeproj
 
-XCODEFLAGS=-workspace 'AutoJSONSerialization.xcodeproj/project.xcworkspace' \
+XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
 				-scheme 'AutoJSONSerialization' \
 				-enableCodeCoverage YES
 
