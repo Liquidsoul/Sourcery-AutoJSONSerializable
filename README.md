@@ -4,6 +4,7 @@ Sourcery AutoJSONSerialization
 This is my attempt to implement some [Sourcery](https://github.com/krzysztofzablocki/Sourcery) templates which automatically generates JSON bindings for your `struct`s and `classes`.  
 
 [![Build Status](https://travis-ci.org/Liquidsoul/Sourcery-AutoJSONSerializable.svg?branch=master)](https://travis-ci.org/Liquidsoul/Sourcery-AutoJSONSerializable)
+[![codecov](https://codecov.io/gh/Liquidsoul/Sourcery-AutoJSONSerializable/branch/master/graph/badge.svg)](https://codecov.io/gh/Liquidsoul/Sourcery-AutoJSONSerializable)
 
 My objective here is to provide a fully tested code generation template that will let you skip the pain of writing this code:
 
