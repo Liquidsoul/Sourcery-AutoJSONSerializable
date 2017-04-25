@@ -1,4 +1,4 @@
 struct SinglePropertyWithKeyPathAnnotation: AutoJSONDeserializable, AutoJSONSerializable {
-    // sourcery: keyName = "label"
+    // sourcery: JSONKey = "label"
     let name: String
 }

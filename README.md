@@ -87,7 +87,7 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
   * ISO8601 formatted dates
   * optionals
   * nested structures
-  * JSON keyName annotation
+  * JSONKey annotation
 
 ## Annotations ##
 
@@ -102,14 +102,14 @@ Let's say you have this JSON:
 ```
 
 As you can see, the naming convention does not follow camel case. To fix this you can use Sourcery annotations.  
-On a property, you can define the `keyName` attribute with the JSON name you want to bind the property to:
+On a property, you can define the `JSONKey` attribute with the JSON name you want to bind the property to:
 
 ``` swift
 struct Contact {
     let id: String
-    // sourcery: keyName = "first_name"
+    // sourcery: JSONKey = "first_name"
     let firstName: String
-    // sourcery: keyName = "last_name"
+    // sourcery: JSONKey = "last_name"
     let lastName: String
 }
 ```

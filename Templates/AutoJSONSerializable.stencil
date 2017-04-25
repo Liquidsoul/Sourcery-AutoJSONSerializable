@@ -13,7 +13,7 @@ extension {{ type.name }}: JSONSerializable {
         var jsonObject = [String: Any]()
         {% for variable in type.storedVariables %}
         let {{ variable.name }} = self.{{ variable.name }}{% if variable.type.implements.AutoJSONSerializable %}{% if variable.isOptional %}?{%endif%}.toJSONObject(){% else %}{%if variable.unwrappedTypeName == "Date" %}{% if variable.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %}
-        jsonObject["{{ variable.annotations.keyName|default:variable.name }}"] = {{ variable.name }}
+        jsonObject["{{ variable.annotations.JSONKey|default:variable.name }}"] = {{ variable.name }}
         {% endfor %}
         return jsonObject
     }
