@@ -41,4 +41,4 @@ ci: install test
 $(SOURCERY):
 	swift build -c release
 
-.PHONY: deps sourcery watch test clean xcode ci
+.PHONY: install sourcery watch test clean xcode ci
