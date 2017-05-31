@@ -12,7 +12,6 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target  = '8.0'
   
-  s.source_files = 'Sources/AutoJSONSerialization/*.swift'
   s.preserve_paths = 'Templates'
 
 end
