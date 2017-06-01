@@ -87,6 +87,7 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
   * ISO8601 formatted dates
   * Optionals.
   * Nested structures.
+  * Nested types with custom JSONSerializable or JSONDeserializable implementation.
   * JSONKey annotation.
 
 ## Annotations ##
@@ -111,6 +112,27 @@ struct Contact {
     let firstName: String
     // sourcery: JSONKey = "last_name"
     let lastName: String
+}
+```
+
+## Custom JSON*able Implementation ##
+
+If you want to nest some types that are not currently supported (for example: enums with associated values) or if you want to provide a special implementation of the serde methods for those types, you can simply implement the `JSONSerializable` and/or `JSONDeserializable` protocols.
+
+For example, if `Job` is an enum, you can still add it to `Contact`:
+
+``` swift
+struct Contact {
+    let id: String
+    let job: Job
+}
+
+enum Job: JSONSerializable {
+    […]
+
+    func toJSONObject() -> [String: Any] {
+        // Implemnt your custom serializer.
+    }
 }
 ```
 
