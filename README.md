@@ -83,11 +83,11 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
 
 # Features #
 
-  * primitive JSON types (String, Int, Double)
+  * Primitive JSON types (String, Int, Double).
   * ISO8601 formatted dates
-  * optionals
-  * nested structures
-  * JSONKey annotation
+  * Optionals.
+  * Nested structures.
+  * JSONKey annotation.
 
 ## Annotations ##
 
@@ -116,10 +116,47 @@ struct Contact {
 
 # Installation #
 
-The current installation process is pretty basic and does not support any dependency managers yet.  
+## With CocoaPods ##
+
+Add `pod 'Sourcery-AutoJSONSerializable'` to your [Podfile](https://guides.cocoapods.org/using/using-cocoapods.html).
+
+Configure your `.sourcery.yml` file with this:
+
+``` yaml
+[…]
+templates:
+  - Pods/Sourcery-AutoJSONSerializable/Templates/
+  […]
+```
+
+Add those protocoles anywhere in your source code:
+
+``` swift
+protocol AutoJSONSerializable {}
+protocol AutoJSONDeserializable {}
+
+public protocol JSONSerializable {
+    func toJSONObject() -> [String: Any]
+}
+
+protocol JSONDeserializable {
+    init?(JSONObject: [String: Any])
+}
+```
+
+And, finally, to use it on a structure, just add one of the "Auto" protocols:
+
+``` swift
+struct Contact, AutoJSONSerializable {
+    [...]
+}
+```
+
+## Manual Install ##
+
+The current installation process is pretty basic and does not support any dependency managers yet.
 To install just copy the following source files in your project:
   * `Sources/AutoJSONSerialization/AutoJSONSerializable.swift`
   * `Sources/AutoJSONSerialization/AutoJSONDeserializable.swift`
-  * `Sources/AutoJSONSerialization/JSONDateFormatter.swift`
 
 And then copy the Templates files and configure Sourcery.
