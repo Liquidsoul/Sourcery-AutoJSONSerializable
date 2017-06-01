@@ -6,10 +6,6 @@
 
 import Foundation
 
-protocol JSONDeserializable {
-    init?(JSONObject: [String: Any])
-}
-
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 
 // MARK: - DateProperty AutoJSONDeserializable
