@@ -84,7 +84,7 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
 # Features #
 
   * Primitive JSON types (String, Int, Double).
-  * ISO8601 formatted dates
+  * ISO8601 formatted dates.
   * Optionals.
   * Nested structures.
   * Nested types with custom JSONSerializable or JSONDeserializable implementation.
@@ -94,6 +94,7 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
 
 When mapping your JSON to your model structure, you may sometimes want to use a different attribute name as the one in the JSON file.  
 Let's say you have this JSON:
+
 ``` json
 {
   "id": "SomeID",
@@ -151,7 +152,7 @@ templates:
   […]
 ```
 
-Add those protocoles anywhere in your source code:
+Add those protocols anywhere in your source code:
 
 ``` swift
 protocol AutoJSONSerializable {}
@@ -169,14 +170,13 @@ protocol JSONDeserializable {
 And, finally, to use it on a structure, just add one of the "Auto" protocols:
 
 ``` swift
-struct Contact, AutoJSONSerializable {
+struct Contact: AutoJSONSerializable {
     [...]
 }
 ```
 
 ## Manual Install ##
 
-The current installation process is pretty basic and does not support any dependency managers yet.
 To install just copy the following source files in your project:
   * `Sources/AutoJSONSerialization/AutoJSONSerializable.swift`
   * `Sources/AutoJSONSerialization/AutoJSONDeserializable.swift`
