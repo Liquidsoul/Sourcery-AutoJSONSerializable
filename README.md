@@ -83,16 +83,18 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
 
 # Features #
 
-  * primitive JSON types (String, Int, Double)
-  * ISO8601 formatted dates
-  * optionals
-  * nested structures
-  * JSONKey annotation
+  * Primitive JSON types (String, Int, Double).
+  * ISO8601 formatted dates.
+  * Optionals.
+  * Nested structures.
+  * Nested types with custom JSONSerializable or JSONDeserializable implementation.
+  * JSONKey annotation.
 
 ## Annotations ##
 
 When mapping your JSON to your model structure, you may sometimes want to use a different attribute name as the one in the JSON file.  
 Let's say you have this JSON:
+
 ``` json
 {
   "id": "SomeID",
@@ -114,12 +116,69 @@ struct Contact {
 }
 ```
 
+## Custom JSON*able Implementation ##
+
+If you want to nest some types that are not currently supported (for example: enums with associated values) or if you want to provide a special implementation of the serde methods for those types, you can simply implement the `JSONSerializable` and/or `JSONDeserializable` protocols.
+
+For example, if `Job` is an enum, you can still add it to `Contact`:
+
+``` swift
+struct Contact {
+    let id: String
+    let job: Job
+}
+
+enum Job: JSONSerializable {
+    […]
+
+    func toJSONObject() -> [String: Any] {
+        // Implemnt your custom serializer.
+    }
+}
+```
+
 # Installation #
 
-The current installation process is pretty basic and does not support any dependency managers yet.  
+## With CocoaPods ##
+
+Add `pod 'Sourcery-AutoJSONSerializable'` to your [Podfile](https://guides.cocoapods.org/using/using-cocoapods.html).
+
+Configure your `.sourcery.yml` file with this:
+
+``` yaml
+[…]
+templates:
+  - Pods/Sourcery-AutoJSONSerializable/Templates/
+  […]
+```
+
+Add those protocols anywhere in your source code:
+
+``` swift
+protocol AutoJSONSerializable {}
+protocol AutoJSONDeserializable {}
+
+public protocol JSONSerializable {
+    func toJSONObject() -> [String: Any]
+}
+
+protocol JSONDeserializable {
+    init?(JSONObject: [String: Any])
+}
+```
+
+And, finally, to use it on a structure, just add one of the "Auto" protocols:
+
+``` swift
+struct Contact: AutoJSONSerializable {
+    [...]
+}
+```
+
+## Manual Install ##
+
 To install just copy the following source files in your project:
   * `Sources/AutoJSONSerialization/AutoJSONSerializable.swift`
   * `Sources/AutoJSONSerialization/AutoJSONDeserializable.swift`
-  * `Sources/AutoJSONSerialization/JSONDateFormatter.swift`
 
 And then copy the Templates files and configure Sourcery.
