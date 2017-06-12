@@ -46,6 +46,16 @@ extension Date {
 
 // MARK: - AutoJSONSerializable for classes, protocols, structs
 
+// MARK: - ArrayProperty AutoJSONSerializable
+extension ArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let array = self.array.map { $0.toJSONObject() }
+        jsonObject["array"] = array
+        return jsonObject
+    }
+}
+
 // MARK: - DateProperty AutoJSONSerializable
 extension DateProperty: JSONSerializable {
     internal func toJSONObject() -> [String: Any] {
