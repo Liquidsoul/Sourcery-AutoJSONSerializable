@@ -1,5 +1,5 @@
 import Foundation
 
-struct ArrayProperty: AutoJSONSerializable {
+struct ArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let array: [MultiTypesProperties]
 }

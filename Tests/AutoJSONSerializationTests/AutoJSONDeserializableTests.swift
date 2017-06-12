@@ -81,4 +81,26 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.optionalDate, Date(timeIntervalSince1970: 851042397))
     }
 
+    func test_ArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "array": [
+            [
+              "string": "value",
+              "integer": 42,
+              "optionalInteger": 24,
+              "double": 66.6
+            ]
+          ]
+        ]
+
+        guard let object = ArrayProperty(JSONObject: jsonObject), let firstItem = object.array.first else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(firstItem.string, "value")
+        XCTAssertEqual(firstItem.integer, 42)
+        XCTAssertEqual(firstItem.optionalInteger, 24)
+        XCTAssertEqual(firstItem.double, 66.6)
+    }
+
 }
