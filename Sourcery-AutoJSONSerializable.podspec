@@ -1,4 +1,5 @@
 # coding: utf-8
+
 Pod::Spec.new do |s|
   s.name     = 'Sourcery-AutoJSONSerializable'
   s.version  = '0.1.0'
@@ -11,8 +12,7 @@ Pod::Spec.new do |s|
   s.description = '…' \
                   '…'
 
-  s.ios.deployment_target  = '8.0'
-  
-  s.preserve_paths = 'Templates'
+  s.ios.deployment_target = '8.0'
 
+  s.preserve_paths = 'Templates'
 end
