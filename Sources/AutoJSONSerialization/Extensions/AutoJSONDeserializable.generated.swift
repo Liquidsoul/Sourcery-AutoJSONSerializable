@@ -16,6 +16,14 @@ extension ArrayProperty: JSONDeserializable {
     }
 }
 
+// MARK: - DateArrayProperty AutoJSONDeserializable
+extension DateArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let dateArray = (JSONObject["dateArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.dateArray = dateArray
+    }
+}
+
 // MARK: - DateProperty AutoJSONDeserializable
 extension DateProperty: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {

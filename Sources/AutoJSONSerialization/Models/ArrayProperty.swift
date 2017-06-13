@@ -4,6 +4,6 @@ struct ArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let array: [MultiTypesProperties]
 }
 
-struct DateArrayProperty: AutoJSONSerializable {
+struct DateArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let dateArray: [Date]
 }
