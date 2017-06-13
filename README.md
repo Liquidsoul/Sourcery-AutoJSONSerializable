@@ -90,6 +90,7 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
   * Nested structures.
   * Nested types with custom JSONSerializable or JSONDeserializable implementation.
   * JSONKey annotation.
+  * Arrays of primitive JSON types, `Date`s and JSON*able types.
 
 ## Annotations ##
 
