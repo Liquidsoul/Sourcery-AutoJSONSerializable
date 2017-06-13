@@ -91,6 +91,16 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
+    func test_DateArrayPropertySerialization() {
+        let arrayItem = Date(timeIntervalSince1970: 482196050)
+        let object = DateArrayProperty(dateArray: [arrayItem])
+        let jsonObject: [String: Any] = [
+          "dateArray": ["1985-04-12T23:20:50Z"]
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
     func toString(_ JSONObject: [String: Any]) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }

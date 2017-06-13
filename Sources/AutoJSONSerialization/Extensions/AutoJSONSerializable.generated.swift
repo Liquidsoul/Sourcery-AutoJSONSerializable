@@ -56,6 +56,16 @@ extension ArrayProperty: JSONSerializable {
     }
 }
 
+// MARK: - DateArrayProperty AutoJSONSerializable
+extension DateArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let dateArray = self.dateArray.map { $0.iso8601String() }
+        jsonObject["dateArray"] = dateArray
+        return jsonObject
+    }
+}
+
 // MARK: - DateProperty AutoJSONSerializable
 extension DateProperty: JSONSerializable {
     internal func toJSONObject() -> [String: Any] {

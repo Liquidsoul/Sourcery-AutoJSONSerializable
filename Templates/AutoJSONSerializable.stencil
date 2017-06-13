@@ -53,7 +53,7 @@ extension {{ type.name }}: JSONSerializable {
         {% ifnot variable.isArray %}
         let {{ variable.name }} = self.{{ variable.name }}{% if variable.type.implements.AutoJSONSerializable or variable.type.implements.JSONSerializable %}{% if variable.isOptional %}?{%endif%}.toJSONObject(){% else %}{%if variable.unwrappedTypeName == "Date" %}{% if variable.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %}
         {% else %}
-        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType.implements.AutoJSONSerializable or variable.typeName.array.elementType.implements.JSONSerializable %}.toJSONObject(){% endif %} }
+        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType.implements.AutoJSONSerializable or variable.typeName.array.elementType.implements.JSONSerializable %}.toJSONObject(){% else %}{%if variable.typeName.array.elementTypeName.unwrappedTypeName == "Date" %}{% if variable.typeName.array.elementTypeName.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %} }
         {% endif %}
         jsonObject["{{ variable.annotations.JSONKey|default:variable.name }}"] = {{ variable.name }}
         {% endfor %}
