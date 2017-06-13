@@ -38,6 +38,21 @@ ci: install test
 	swift package generate-xcodeproj
 	xcodebuild $(XCODEFLAGS) test
 
+.PHONY: release_pod_patch
+## release a new patch version of the pod. See `fastlane lanes` for more information
+release_pod_patch:
+	bundle exec fastlane release_pod bump_type:patch
+
+.PHONY: release_pod_minor
+## release a new minor version of the pod. See `fastlane lanes` for more information
+release_pod_minor:
+	bundle exec fastlane release_pod bump_type:minor
+
+.PHONY: release_pod_major
+## release a new major version of the pod. See `fastlane lanes` for more information
+release_pod_major:
+	bundle exec fastlane release_pod bump_type:major
+
 $(SOURCERY):
 	swift build -c release
 
