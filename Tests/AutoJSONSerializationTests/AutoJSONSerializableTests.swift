@@ -70,6 +70,50 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
+    func test_ArrayPropertySerialization() {
+        let arrayItem = MultiTypesProperties(string: "value",
+                                             integer: 42,
+                                             optionalInteger: 24,
+                                             double: 66.6,
+                                             optionalDouble: nil)
+        let object = ArrayProperty(array: [arrayItem])
+        let jsonObject: [String: Any] = [
+          "array": [
+            [
+              "string": "value",
+              "integer": 42,
+              "optionalInteger": 24,
+              "double": 66.6
+            ]
+          ]
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
+    func test_DateArrayPropertySerialization() {
+        let arrayItem = Date(timeIntervalSince1970: 482196050)
+        let object = DateArrayProperty(dateArray: [arrayItem])
+        let jsonObject: [String: Any] = [
+          "dateArray": ["1985-04-12T23:20:50Z"]
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
+    func test_BasicTypesArrayPropertySerialization() {
+        let object = BasicTypesArrayProperty(doubleArray: [1.2, 3.4],
+                                             integerArray: [1, 2, 3, 4],
+                                             stringArray: ["A", "B", "C"])
+        let jsonObject: [String: Any] = [
+          "doubleArray": [1.2, 3.4],
+          "integerArray": [1, 2, 3, 4],
+          "stringArray": ["A", "B", "C"]
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
     func toString(_ JSONObject: [String: Any]) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }

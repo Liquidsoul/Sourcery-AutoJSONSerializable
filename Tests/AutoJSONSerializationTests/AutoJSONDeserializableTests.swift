@@ -81,4 +81,55 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.optionalDate, Date(timeIntervalSince1970: 851042397))
     }
 
+    func test_ArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "array": [
+            [
+              "string": "value",
+              "integer": 42,
+              "optionalInteger": 24,
+              "double": 66.6
+            ]
+          ]
+        ]
+
+        guard let object = ArrayProperty(JSONObject: jsonObject), let firstItem = object.array.first else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(firstItem.string, "value")
+        XCTAssertEqual(firstItem.integer, 42)
+        XCTAssertEqual(firstItem.optionalInteger, 24)
+        XCTAssertEqual(firstItem.double, 66.6)
+    }
+
+    func test_DateArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "dateArray": ["1985-04-12T23:20:50Z"]
+        ]
+        let expectedItem = Date(timeIntervalSince1970: 482196050)
+
+        guard let object = DateArrayProperty(JSONObject: jsonObject), let firstItem = object.dateArray.first else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(firstItem, expectedItem)
+    }
+
+    func test_BasicTypesArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "doubleArray": [1.2, 3.4],
+          "integerArray": [1, 2, 3, 4],
+          "stringArray": ["A", "B", "C"]
+        ]
+
+        guard let object = BasicTypesArrayProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.doubleArray, [1.2, 3.4])
+        XCTAssertEqual(object.integerArray, [1, 2, 3, 4])
+        XCTAssertEqual(object.stringArray, ["A", "B", "C"])
+    }
+
 }

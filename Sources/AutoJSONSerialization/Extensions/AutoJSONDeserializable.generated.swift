@@ -8,6 +8,34 @@ import Foundation
 
 // MARK: - AutoJSONDeserializable for classes, protocols, structs
 
+// MARK: - ArrayProperty AutoJSONDeserializable
+extension ArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let array = (JSONObject["array"] as? [[String: Any]])?.flatMap(MultiTypesProperties.init(JSONObject:)) else { return nil }
+        self.array = array
+    }
+}
+
+// MARK: - BasicTypesArrayProperty AutoJSONDeserializable
+extension BasicTypesArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let doubleArray = (JSONObject["doubleArray"] as? [Double]) else { return nil }
+        self.doubleArray = doubleArray
+        guard let integerArray = (JSONObject["integerArray"] as? [Int]) else { return nil }
+        self.integerArray = integerArray
+        guard let stringArray = (JSONObject["stringArray"] as? [String]) else { return nil }
+        self.stringArray = stringArray
+    }
+}
+
+// MARK: - DateArrayProperty AutoJSONDeserializable
+extension DateArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let dateArray = (JSONObject["dateArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.dateArray = dateArray
+    }
+}
+
 // MARK: - DateProperty AutoJSONDeserializable
 extension DateProperty: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
