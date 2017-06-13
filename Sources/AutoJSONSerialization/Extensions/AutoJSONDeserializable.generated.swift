@@ -65,7 +65,7 @@ extension JSONDeserializableProperty: JSONDeserializable {
 // MARK: - JSONDeserializableProperty.Entity AutoJSONDeserializable
 extension JSONDeserializableProperty.Entity: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
-        guard let name = JSONObject["name"] as? String else { return nil }
+        guard let name = (JSONObject["name"] as? String) else { return nil }
         self.name = name
     }
 }
@@ -73,15 +73,15 @@ extension JSONDeserializableProperty.Entity: JSONDeserializable {
 // MARK: - MultiTypesProperties AutoJSONDeserializable
 extension MultiTypesProperties: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
-        guard let string = JSONObject["string"] as? String else { return nil }
+        guard let string = (JSONObject["string"] as? String) else { return nil }
         self.string = string
-        guard let integer = JSONObject["integer"] as? Int else { return nil }
+        guard let integer = (JSONObject["integer"] as? Int) else { return nil }
         self.integer = integer
-        let optionalInteger = JSONObject["optionalInteger"] as? Int
+        let optionalInteger = (JSONObject["optionalInteger"] as? Int)
         self.optionalInteger = optionalInteger
-        guard let double = JSONObject["double"] as? Double else { return nil }
+        guard let double = (JSONObject["double"] as? Double) else { return nil }
         self.double = double
-        let optionalDouble = JSONObject["optionalDouble"] as? Double
+        let optionalDouble = (JSONObject["optionalDouble"] as? Double)
         self.optionalDouble = optionalDouble
     }
 }
@@ -89,7 +89,7 @@ extension MultiTypesProperties: JSONDeserializable {
 // MARK: - OptionalProperty AutoJSONDeserializable
 extension OptionalProperty: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
-        let name = JSONObject["name"] as? String
+        let name = (JSONObject["name"] as? String)
         self.name = name
     }
 }
@@ -97,7 +97,7 @@ extension OptionalProperty: JSONDeserializable {
 // MARK: - SinglePropertyNoAnnotation AutoJSONDeserializable
 extension SinglePropertyNoAnnotation: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
-        guard let name = JSONObject["name"] as? String else { return nil }
+        guard let name = (JSONObject["name"] as? String) else { return nil }
         self.name = name
     }
 }
@@ -105,7 +105,7 @@ extension SinglePropertyNoAnnotation: JSONDeserializable {
 // MARK: - SinglePropertyWithKeyPathAnnotation AutoJSONDeserializable
 extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
-        guard let name = JSONObject["label"] as? String else { return nil }
+        guard let name = (JSONObject["label"] as? String) else { return nil }
         self.name = name
     }
 }
