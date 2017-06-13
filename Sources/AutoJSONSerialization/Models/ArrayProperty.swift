@@ -7,3 +7,9 @@ struct ArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
 struct DateArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let dateArray: [Date]
 }
+
+struct BasicTypesArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
+    let doubleArray: [Double]
+    let integerArray: [Int]
+    let stringArray: [String]
+}

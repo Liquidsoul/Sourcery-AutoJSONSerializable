@@ -116,4 +116,20 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(firstItem, expectedItem)
     }
 
+    func test_BasicTypesArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "doubleArray": [1.2, 3.4],
+          "integerArray": [1, 2, 3, 4],
+          "stringArray": ["A", "B", "C"]
+        ]
+
+        guard let object = BasicTypesArrayProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.doubleArray, [1.2, 3.4])
+        XCTAssertEqual(object.integerArray, [1, 2, 3, 4])
+        XCTAssertEqual(object.stringArray, ["A", "B", "C"])
+    }
+
 }

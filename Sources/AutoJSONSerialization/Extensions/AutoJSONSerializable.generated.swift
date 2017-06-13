@@ -56,6 +56,20 @@ extension ArrayProperty: JSONSerializable {
     }
 }
 
+// MARK: - BasicTypesArrayProperty AutoJSONSerializable
+extension BasicTypesArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let doubleArray = self.doubleArray.map { $0 }
+        jsonObject["doubleArray"] = doubleArray
+        let integerArray = self.integerArray.map { $0 }
+        jsonObject["integerArray"] = integerArray
+        let stringArray = self.stringArray.map { $0 }
+        jsonObject["stringArray"] = stringArray
+        return jsonObject
+    }
+}
+
 // MARK: - DateArrayProperty AutoJSONSerializable
 extension DateArrayProperty: JSONSerializable {
     internal func toJSONObject() -> [String: Any] {

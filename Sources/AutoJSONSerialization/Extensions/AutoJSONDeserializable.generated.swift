@@ -16,6 +16,18 @@ extension ArrayProperty: JSONDeserializable {
     }
 }
 
+// MARK: - BasicTypesArrayProperty AutoJSONDeserializable
+extension BasicTypesArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let doubleArray = (JSONObject["doubleArray"] as? [Double]) else { return nil }
+        self.doubleArray = doubleArray
+        guard let integerArray = (JSONObject["integerArray"] as? [Int]) else { return nil }
+        self.integerArray = integerArray
+        guard let stringArray = (JSONObject["stringArray"] as? [String]) else { return nil }
+        self.stringArray = stringArray
+    }
+}
+
 // MARK: - DateArrayProperty AutoJSONDeserializable
 extension DateArrayProperty: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {

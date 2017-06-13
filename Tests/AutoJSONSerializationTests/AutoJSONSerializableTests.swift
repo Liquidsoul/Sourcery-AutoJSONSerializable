@@ -101,6 +101,19 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
+    func test_BasicTypesArrayPropertySerialization() {
+        let object = BasicTypesArrayProperty(doubleArray: [1.2, 3.4],
+                                             integerArray: [1, 2, 3, 4],
+                                             stringArray: ["A", "B", "C"])
+        let jsonObject: [String: Any] = [
+          "doubleArray": [1.2, 3.4],
+          "integerArray": [1, 2, 3, 4],
+          "stringArray": ["A", "B", "C"]
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
     func toString(_ JSONObject: [String: Any]) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }
