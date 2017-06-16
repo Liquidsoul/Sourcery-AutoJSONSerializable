@@ -135,7 +135,7 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
-    func toString(_ JSONObject: [String: Any]) -> String? {
+    func toString(_ JSONObject: Any) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }
 }
