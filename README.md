@@ -18,11 +18,12 @@ extension Contact: JSONDeserializable {
         case age = "age"
     }
 
-    init?(JSONObject: [String : Any]) {
-        guard let id = JSONObject[Fields.identifier.rawValue] as? String,
-            let firstName = JSONObject[Fields.firstName.rawValue] as? String,
-            let lastName = JSONObject[Fields.lastName.rawValue] as? String,
-            let age = JSONObject[Fields.age.rawValue] as? Int
+    init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any],
+              let let id = JSONObject[Fields.identifier.rawValue] as? String,
+              let firstName = JSONObject[Fields.firstName.rawValue] as? String,
+              let lastName = JSONObject[Fields.lastName.rawValue] as? String,
+              let age = JSONObject[Fields.age.rawValue] as? Int
             else {
                 return nil
         }
@@ -40,11 +41,11 @@ The JSON serialization/deserialization is based on two protocols.
 
 ``` swift
 protocol JSONDeserializable {
-    init?(JSONObject: [String: Any])
+    init?(JSONObject: Any)
 }
 
 protocol JSONSerializable {
-    func toJSONObject() -> [String: Any]
+    func toJSONObject() -> Any
 }
 ```
 
@@ -133,7 +134,7 @@ struct Contact {
 enum Job: JSONSerializable {
     […]
 
-    func toJSONObject() -> [String: Any] {
+    func toJSONObject() -> Any {
         // Implemnt your custom serializer.
     }
 }
@@ -161,11 +162,11 @@ protocol AutoJSONSerializable {}
 protocol AutoJSONDeserializable {}
 
 public protocol JSONSerializable {
-    func toJSONObject() -> [String: Any]
+    func toJSONObject() -> Any
 }
 
 protocol JSONDeserializable {
-    init?(JSONObject: [String: Any])
+    init?(JSONObject: Any)
 }
 ```
 
