@@ -184,3 +184,17 @@ To install just copy the following source files in your project:
   * `Sources/AutoJSONSerialization/AutoJSONDeserializable.swift`
 
 And then copy the Templates files and configure Sourcery.
+
+# Development #
+
+This library uses the Swift Package Manager to build the code with a Sourcery pre-build step described using a `Makefile`.  
+You can find all the possible build rules using the command `make help`.
+
+## Pod deployment ##
+
+We offer a cocoapods installation which involves several steps to deliver new versions of the library.  
+This process is automated using `fastlane` and can be accessed using `make`. Here it what it'll do:
+
+1. bump the podspec version and commit the change to the repository
+2. create the corresponding tag
+3. push the new version to github and to `cocoapods` trunk

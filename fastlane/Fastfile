@@ -1,0 +1,45 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+skip_docs
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version '2.33.0'
+
+default_platform :mac
+
+platform :mac do
+  desc 'Release a new pod'
+  desc 'You can specify the bump type using `bump_type` parameter (patch, minor or major)'
+  lane :release_pod do |options|
+    # ensure that local status is ready for release
+    ensure_git_branch
+    ensure_git_status_clean(show_uncommitted_changes: true)
+
+    # bump version number, commit change and add tag
+    podspec_path = 'Sourcery-AutoJSONSerializable.podspec'
+    version = version_bump_podspec(bump_type: options[:bump_type])
+    git_commit(path: podspec_path, message: "[pod] bump to version #{version}")
+    add_git_tag(tag: version)
+
+    # push to remote and cocoapods trunk
+    push_to_git_remote
+    push_git_tags
+    pod_push(path: podspec_path)
+  end
+end
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded.
+# Learn more at https://github.com/fastlane/fastlane#metrics
