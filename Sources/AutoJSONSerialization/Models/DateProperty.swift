@@ -8,7 +8,7 @@ struct DateProperty: AutoJSONDeserializable, AutoJSONSerializable {
 
 typealias MomentInTime = Date
 
-struct TypealiasedDateProperty: AutoJSONSerializable {
+struct TypealiasedDateProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let momentInTime: MomentInTime
     let optionalMomentInTime: MomentInTime?
 }

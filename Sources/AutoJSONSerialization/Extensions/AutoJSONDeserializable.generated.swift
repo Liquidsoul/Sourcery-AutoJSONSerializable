@@ -110,4 +110,14 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
     }
 }
 
+// MARK: - TypealiasedDateProperty AutoJSONDeserializable
+extension TypealiasedDateProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let momentInTime = (JSONObject["momentInTime"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.momentInTime = momentInTime
+        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] as? String).flatMap(JSONDateFormatter.date(from:))
+        self.optionalMomentInTime = optionalMomentInTime
+    }
+}
+
 // MARK: -

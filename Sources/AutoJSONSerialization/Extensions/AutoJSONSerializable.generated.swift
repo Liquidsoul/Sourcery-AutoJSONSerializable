@@ -168,6 +168,16 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
     }
 }
 
+// MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
+extension TypealiasedDateArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let momentArray = self.momentArray.map { $0.iso8601String() }
+        jsonObject["momentArray"] = momentArray
+        return jsonObject
+    }
+}
+
 // MARK: - TypealiasedDateProperty AutoJSONSerializable
 extension TypealiasedDateProperty: JSONSerializable {
     internal func toJSONObject() -> [String: Any] {
@@ -176,16 +186,6 @@ extension TypealiasedDateProperty: JSONSerializable {
         jsonObject["momentInTime"] = momentInTime
         let optionalMomentInTime = self.optionalMomentInTime?.iso8601String()
         jsonObject["optionalMomentInTime"] = optionalMomentInTime
-        return jsonObject
-    }
-}
-
-// MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
-extension TypealiasedDateArrayProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
-        var jsonObject = [String: Any]()
-        let momentArray = self.momentArray.map { $0.iso8601String() }
-        jsonObject["momentArray"] = momentArray
         return jsonObject
     }
 }
