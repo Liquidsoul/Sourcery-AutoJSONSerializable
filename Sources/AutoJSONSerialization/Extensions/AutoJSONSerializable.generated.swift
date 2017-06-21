@@ -180,4 +180,14 @@ extension TypealiasedDateProperty: JSONSerializable {
     }
 }
 
+// MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
+extension TypealiasedDateArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let momentArray = self.momentArray.map { $0.iso8601String() }
+        jsonObject["momentArray"] = momentArray
+        return jsonObject
+    }
+}
+
 // MARK: -

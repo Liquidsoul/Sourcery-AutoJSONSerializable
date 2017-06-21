@@ -8,6 +8,11 @@ struct DateArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let dateArray: [Date]
 }
 
+struct TypealiasedDateArrayProperty: AutoJSONSerializable {
+    typealias Moment = Date
+    let momentArray: [Moment]
+}
+
 struct BasicTypesArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let doubleArray: [Double]
     let integerArray: [Int]
