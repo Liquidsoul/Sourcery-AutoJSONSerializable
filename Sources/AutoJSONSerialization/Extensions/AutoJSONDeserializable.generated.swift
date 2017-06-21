@@ -120,4 +120,12 @@ extension TypealiasedDateProperty: JSONDeserializable {
     }
 }
 
+// MARK: - TypealiasedDateArrayProperty AutoJSONDeserializable
+extension TypealiasedDateArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.momentArray = momentArray
+    }
+}
+
 // MARK: -
