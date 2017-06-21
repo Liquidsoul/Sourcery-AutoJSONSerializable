@@ -168,4 +168,16 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
     }
 }
 
+// MARK: - TypealiasedDateProperty AutoJSONSerializable
+extension TypealiasedDateProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let momentInTime = self.momentInTime.iso8601String()
+        jsonObject["momentInTime"] = momentInTime
+        let optionalMomentInTime = self.optionalMomentInTime?.iso8601String()
+        jsonObject["optionalMomentInTime"] = optionalMomentInTime
+        return jsonObject
+    }
+}
+
 // MARK: -

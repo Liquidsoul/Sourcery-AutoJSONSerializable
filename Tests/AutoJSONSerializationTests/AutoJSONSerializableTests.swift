@@ -70,6 +70,17 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
+    func test_TypealiasedDatePropertySerialization() {
+        let object = TypealiasedDateProperty(momentInTime: Date(timeIntervalSince1970: 482196050),
+                                             optionalMomentInTime: Date(timeIntervalSince1970: 851042397))
+        let jsonObject: [String: Any] = [
+          "momentInTime": "1985-04-12T23:20:50Z",
+          "optionalMomentInTime": "1996-12-20T00:39:57Z"
+        ]
+
+        XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
+    }
+
     func test_ArrayPropertySerialization() {
         let arrayItem = MultiTypesProperties(string: "value",
                                              integer: 42,

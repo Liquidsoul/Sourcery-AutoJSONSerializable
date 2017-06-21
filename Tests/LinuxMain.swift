@@ -28,6 +28,7 @@ extension AutoJSONSerializableTests {
     ("test_OptionalPropertySerialization", test_OptionalPropertySerialization),
     ("test_JSONSerializablePropertySerialization", test_JSONSerializablePropertySerialization),
     ("test_DatePropertySerialization", test_DatePropertySerialization),
+    ("test_TypealiasedDatePropertySerialization", test_TypealiasedDatePropertySerialization),
     ("test_ArrayPropertySerialization", test_ArrayPropertySerialization),
     ("test_DateArrayPropertySerialization", test_DateArrayPropertySerialization),
     ("test_BasicTypesArrayPropertySerialization", test_BasicTypesArrayPropertySerialization),

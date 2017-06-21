@@ -5,3 +5,10 @@ struct DateProperty: AutoJSONDeserializable, AutoJSONSerializable {
     // sourcery: JSONKey = "optional_date"
     let optionalDate: Date?
 }
+
+typealias MomentInTime = Date
+
+struct TypealiasedDateProperty: AutoJSONSerializable {
+    let momentInTime: MomentInTime
+    let optionalMomentInTime: MomentInTime?
+}
