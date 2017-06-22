@@ -35,13 +35,13 @@
       "package": "Result",
       "reason": null,
       "repositoryURL": "https://github.com/antitypical/Result.git",
-      "version": "3.2.1"
+      "version": "3.2.3"
     },
     {
       "package": "SWXMLHash",
       "reason": null,
       "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
-      "version": "3.0.4"
+      "version": "3.1.0"
     },
     {
       "package": "SourceKit",
@@ -53,13 +53,13 @@
       "package": "SourceKitten",
       "reason": null,
       "repositoryURL": "https://github.com/jpsim/SourceKitten.git",
-      "version": "0.17.2"
+      "version": "0.17.6"
     },
     {
       "package": "Sourcery",
       "reason": null,
       "repositoryURL": "https://github.com/krzysztofzablocki/Sourcery.git",
-      "version": "0.6.0"
+      "version": "0.6.1"
     },
     {
       "package": "Spectre",
@@ -71,13 +71,13 @@
       "package": "Stencil",
       "reason": null,
       "repositoryURL": "https://github.com/kylef/Stencil.git",
-      "version": "0.8.0"
+      "version": "0.9.0"
     },
     {
       "package": "StencilSwiftKit",
       "reason": null,
       "repositoryURL": "https://github.com/SwiftGen/StencilSwiftKit.git",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     {
       "package": "SwiftTryCatch",
@@ -89,13 +89,13 @@
       "package": "XcodeEdit",
       "reason": null,
       "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit.git",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "package": "Yams",
       "reason": null,
       "repositoryURL": "https://github.com/jpsim/Yams.git",
-      "version": "0.3.1"
+      "version": "0.3.2"
     }
   ],
   "version": 1

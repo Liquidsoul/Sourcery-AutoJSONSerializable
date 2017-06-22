@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.6.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.6.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable file_length
@@ -164,6 +164,28 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["label"] = name
+        return jsonObject
+    }
+}
+
+// MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
+extension TypealiasedDateArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let momentArray = self.momentArray.map { $0.iso8601String() }
+        jsonObject["momentArray"] = momentArray
+        return jsonObject
+    }
+}
+
+// MARK: - TypealiasedDateProperty AutoJSONSerializable
+extension TypealiasedDateProperty: JSONSerializable {
+    internal func toJSONObject() -> [String: Any] {
+        var jsonObject = [String: Any]()
+        let momentInTime = self.momentInTime.iso8601String()
+        jsonObject["momentInTime"] = momentInTime
+        let optionalMomentInTime = self.optionalMomentInTime?.iso8601String()
+        jsonObject["optionalMomentInTime"] = optionalMomentInTime
         return jsonObject
     }
 }

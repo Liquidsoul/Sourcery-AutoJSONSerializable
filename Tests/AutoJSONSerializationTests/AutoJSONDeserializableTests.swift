@@ -81,6 +81,20 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.optionalDate, Date(timeIntervalSince1970: 851042397))
     }
 
+    func test_TypealiasedDatePropertyDeserialization() {
+        let jsonObject: [String: Any] = [
+          "momentInTime": "1985-04-12T23:20:50Z",
+          "optionalMomentInTime": "1996-12-19T16:39:57-08:00"
+        ]
+
+        guard let object = TypealiasedDateProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(object.momentInTime, Date(timeIntervalSince1970: 482196050))
+        XCTAssertEqual(object.optionalMomentInTime, Date(timeIntervalSince1970: 851042397))
+    }
+
     func test_ArrayPropertySerialization() {
         let jsonObject: [String: Any] = [
           "array": [
@@ -110,6 +124,20 @@ class AutoJSONDeserializableTests: XCTestCase {
         let expectedItem = Date(timeIntervalSince1970: 482196050)
 
         guard let object = DateArrayProperty(JSONObject: jsonObject), let firstItem = object.dateArray.first else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(firstItem, expectedItem)
+    }
+
+    func test_TypealiasedDateArrayPropertySerialization() {
+        let jsonObject: [String: Any] = [
+          "momentArray": ["1985-04-12T23:20:50Z"]
+        ]
+        let expectedItem = Date(timeIntervalSince1970: 482196050)
+
+        guard let object = TypealiasedDateArrayProperty(JSONObject: jsonObject),
+              let firstItem = object.momentArray.first else {
             XCTFail()
             return
         }

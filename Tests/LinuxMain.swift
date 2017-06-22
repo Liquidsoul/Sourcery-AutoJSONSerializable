@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.6.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.6.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable file_length
@@ -15,8 +15,10 @@ extension AutoJSONDeserializableTests {
     ("test_OptionalPropertyDeserialization", test_OptionalPropertyDeserialization),
     ("test_JSONDeserializablePropertyDeserialization", test_JSONDeserializablePropertyDeserialization),
     ("test_DatePropertyDeserialization", test_DatePropertyDeserialization),
+    ("test_TypealiasedDatePropertyDeserialization", test_TypealiasedDatePropertyDeserialization),
     ("test_ArrayPropertySerialization", test_ArrayPropertySerialization),
     ("test_DateArrayPropertySerialization", test_DateArrayPropertySerialization),
+    ("test_TypealiasedDateArrayPropertySerialization", test_TypealiasedDateArrayPropertySerialization),
     ("test_BasicTypesArrayPropertySerialization", test_BasicTypesArrayPropertySerialization),
   ]
 }
@@ -28,8 +30,10 @@ extension AutoJSONSerializableTests {
     ("test_OptionalPropertySerialization", test_OptionalPropertySerialization),
     ("test_JSONSerializablePropertySerialization", test_JSONSerializablePropertySerialization),
     ("test_DatePropertySerialization", test_DatePropertySerialization),
+    ("test_TypealiasedDatePropertySerialization", test_TypealiasedDatePropertySerialization),
     ("test_ArrayPropertySerialization", test_ArrayPropertySerialization),
     ("test_DateArrayPropertySerialization", test_DateArrayPropertySerialization),
+    ("test_TypealiasedDateArrayPropertySerialization", test_TypealiasedDateArrayPropertySerialization),
     ("test_BasicTypesArrayPropertySerialization", test_BasicTypesArrayPropertySerialization),
   ]
 }
