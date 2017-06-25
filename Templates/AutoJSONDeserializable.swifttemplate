@@ -1,0 +1,78 @@
+// swiftlint:disable cyclomatic_complexity file_length function_body_length line_length
+
+import Foundation
+
+// MARK: - AutoJSONDeserializable for classes, protocols, structs
+<%
+func optionalAssignment(_ assignment: String, isOptional: Bool) -> String {
+    if isOptional {
+        return assignment
+    }
+    return "guard \(assignment) else { return nil }"
+}
+
+struct DeserializableData {
+    private let castTypeString: String
+    private let itemOperationString: String
+
+    init(type: Type?, typeName: TypeName) {
+        if type?.implements["AutoJSONDeserializable"] != nil || type?.implements["JSONDeserializable"] != nil {
+            castTypeString = "[String: Any]"
+            itemOperationString = ".flatMap(\(typeName.unwrappedTypeName).init(JSONObject:))"
+        } else if (typeName.actualTypeName ?? typeName).unwrappedTypeName == "Date" {
+            castTypeString = "String"
+            itemOperationString = ".flatMap(JSONDateFormatter.date(from:))"
+        } else {
+            castTypeString = "\(typeName.unwrappedTypeName)"
+            itemOperationString = ""
+        }
+    }
+
+    func castType(isArray: Bool) -> String {
+        if isArray {
+            return "[\(castTypeString)]"
+        }
+        return castTypeString
+    }
+
+    func itemOperation(isArray: Bool) -> String {
+        guard !itemOperationString.isEmpty else {
+            return ""
+        }
+        if isArray {
+            return "?\(itemOperationString)"
+        }
+        return itemOperationString
+    }
+}
+
+func assignment(variableName: String, jsonKey: String, castType: String, itemOperation: String) -> String {
+    return "let \(variableName) = (JSONObject[\"\(jsonKey)\"] as? \(castType))\(itemOperation)"
+}-%>
+<% for type in types.all {
+    guard type.implements["AutoJSONDeserializable"] != nil else { continue }
+   -%>
+
+// MARK: - <%= type.name %> AutoJSONDeserializable
+extension <%= type.name %>: JSONDeserializable {
+    <%= type.accessLevel %> init?(JSONObject: [String: Any]) {
+        <%_ for variable in type.storedVariables {
+            let variableName = variable.name
+            let jsonKey = variable.annotations["JSONKey"] as? String ?? variableName
+            let type: Type?
+            let typeName: TypeName
+            if variable.isArray {
+                type = variable.typeName.array!.elementType
+                typeName = variable.typeName.array!.elementTypeName
+            } else {
+                type = variable.type
+                typeName = variable.typeName
+            }
+            let data = DeserializableData(type: type, typeName: typeName)
+            let assignmentString = assignment(variableName: variableName, jsonKey: jsonKey, castType: data.castType(isArray: variable.isArray), itemOperation: data.itemOperation(isArray: variable.isArray))-%>
+        <%= optionalAssignment(assignmentString, isOptional: variable.isOptional) %>
+        self.<%= variable.name %> = <%= variable.name %>
+        <%_}-%>
+    }
+}
+<%_}-%>

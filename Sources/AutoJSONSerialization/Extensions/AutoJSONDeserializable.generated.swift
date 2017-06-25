@@ -126,5 +126,3 @@ extension TypealiasedDateProperty: JSONDeserializable {
         self.optionalMomentInTime = optionalMomentInTime
     }
 }
-
-// MARK: -
