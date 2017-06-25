@@ -1,0 +1,33 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [
+    {
+      'type': 'directory',
+      'name': "/Users/antondomashnev/Work/SourceryMaster/build/Release/SourceryRuntime.framework/Headers",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "SourceryRuntime-Swift.h",
+          'external-contents': "/Users/antondomashnev/Work/SourceryMaster/build/Release/SourceryRuntime.framework/Versions/A/Headers/SourceryRuntime-Swift.h"
+        },
+        {
+          'type': 'file',
+          'name': "SourceryRuntime.h",
+          'external-contents': "/Users/antondomashnev/Work/SourceryMaster/SourceryRuntime/Supporting Files/SourceryRuntime.h"
+        }
+      ]
+    },
+    {
+      'type': 'directory',
+      'name': "/Users/antondomashnev/Work/SourceryMaster/build/Release/SourceryRuntime.framework/Modules",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "module.modulemap",
+          'external-contents': "/Users/antondomashnev/Work/SourceryMaster/build/Sourcery.build/Release/SourceryRuntime.build/module.modulemap"
+        }
+      ]
+    }
+  ]
+}

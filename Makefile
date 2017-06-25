@@ -14,7 +14,7 @@ test: sourcery
 
 ## run sourcery to generate code from the root templates
 sourcery: $(SOURCERY)
-	$(SOURCERY)
+	Sourcery/bin/sourcery
 
 ## run Sourcery in watch mode for live preview of templates
 watch: $(SOURCERY)
