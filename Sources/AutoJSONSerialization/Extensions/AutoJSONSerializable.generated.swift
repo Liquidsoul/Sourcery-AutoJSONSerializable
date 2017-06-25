@@ -188,5 +188,3 @@ extension TypealiasedDateProperty: JSONSerializable {
         return jsonObject
     }
 }
-
-// MARK: -
