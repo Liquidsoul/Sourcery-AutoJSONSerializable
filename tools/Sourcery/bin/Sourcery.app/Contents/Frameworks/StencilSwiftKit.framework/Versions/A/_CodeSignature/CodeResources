@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		QeW57jl7T3eNJgi4VSPspqkBpOI=
+		nE9x64uaMd6S0Tj0EaKODh6ca1k=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -37,22 +37,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			v7w5fnPERqI4pImVNADBMDQkT04=
+			xxcKsZoxsals5fe8+TKrOLhONU0=
 			</data>
 			<key>hash2</key>
 			<data>
-			eYgMwIpNJTX8tCzhUzrcu5LBp+Ym5tGSmIIwMjFwmcE=
+			V3EWgq5XWJSWWSZeMaE7ql19qmKba9roGB7mLELlRHY=
 			</data>
 		</dict>
 		<key>Modules/StencilSwiftKit.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			pcbGDuta+Ikq2cRjYZ03jsm8Vpg=
+			xnY8miwsVZxRq+z64KKf/RF5KH8=
 			</data>
 			<key>hash2</key>
 			<data>
-			MXC3r6J15zw2mjUAH67GRU47LZu7xdyg2cV6fA7zASw=
+			vIhYeru+OZ7EX32D+O8luC56LRezZyPfQYZq3zrjoOc=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -70,11 +70,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QeW57jl7T3eNJgi4VSPspqkBpOI=
+			nE9x64uaMd6S0Tj0EaKODh6ca1k=
 			</data>
 			<key>hash2</key>
 			<data>
-			NMys3+ZGJ+r29zVLZx9xMMTMPoKEE2gxYJZk/wc8FXk=
+			uiKIavXwHwSCli331loCjM16Uxa1p9z9cSChfGJE1uI=
 			</data>
 		</dict>
 	</dict>

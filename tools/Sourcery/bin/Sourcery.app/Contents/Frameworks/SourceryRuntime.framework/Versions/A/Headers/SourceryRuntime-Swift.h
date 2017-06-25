@@ -166,7 +166,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime9ArrayType")
 @end
 
 
-@interface ArrayType (SWIFT_EXTENSION(SourceryRuntime))
+@interface ArrayType (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -215,7 +215,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime15AssociatedValue")
 @end
 
 
-@interface AssociatedValue (SWIFT_EXTENSION(SourceryRuntime))
+@interface AssociatedValue (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -278,7 +278,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime9Attribute")
 @end
 
 
-@interface Attribute (SWIFT_EXTENSION(SourceryRuntime))
+@interface Attribute (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -397,12 +397,12 @@ SWIFT_CLASS_NAMED("Class")
 
 
 @interface SwiftClass (SWIFT_EXTENSION(SourceryRuntime))
+/// :nodoc:
+- (BOOL)isEqual:(id _Nullable)object SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
 @interface SwiftClass (SWIFT_EXTENSION(SourceryRuntime))
-/// :nodoc:
-- (BOOL)isEqual:(id _Nullable)object SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
@@ -448,7 +448,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime11ClosureType")
 @end
 
 
-@interface ClosureType (SWIFT_EXTENSION(SourceryRuntime))
+@interface ClosureType (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -495,7 +495,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime14DictionaryType")
 @end
 
 
-@interface DictionaryType (SWIFT_EXTENSION(SourceryRuntime))
+@interface DictionaryType (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -589,7 +589,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime8EnumCase")
 @end
 
 
-@interface EnumCase (SWIFT_EXTENSION(SourceryRuntime))
+@interface EnumCase (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -715,7 +715,7 @@ SWIFT_CLASS_NAMED("Method")
 @end
 
 
-@interface SwiftMethod (SWIFT_EXTENSION(SourceryRuntime))
+@interface SwiftMethod (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -772,7 +772,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime15MethodParameter")
 @end
 
 
-@interface MethodParameter (SWIFT_EXTENSION(SourceryRuntime))
+@interface MethodParameter (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -847,12 +847,12 @@ SWIFT_CLASS("_TtC15SourceryRuntime8Protocol")
 
 
 @interface Protocol (SWIFT_EXTENSION(SourceryRuntime))
+/// :nodoc:
+- (BOOL)isEqual:(id _Nullable)object SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
 @interface Protocol (SWIFT_EXTENSION(SourceryRuntime))
-/// :nodoc:
-- (BOOL)isEqual:(id _Nullable)object SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
@@ -916,7 +916,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime15TemplateContext")
 @end
 
 
-@interface TemplateContext (SWIFT_EXTENSION(SourceryRuntime))
+@interface TemplateContext (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -959,7 +959,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime12TupleElement")
 @end
 
 
-@interface TupleElement (SWIFT_EXTENSION(SourceryRuntime))
+@interface TupleElement (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -1020,7 +1020,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime9TupleType")
 @end
 
 
-@interface TupleType (SWIFT_EXTENSION(SourceryRuntime))
+@interface TupleType (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -1045,7 +1045,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime9TupleType")
 @end
 
 
-@interface Type (SWIFT_EXTENSION(SourceryRuntime))
+@interface Type (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -1118,7 +1118,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime8TypeName")
 @end
 
 
-@interface TypeName (SWIFT_EXTENSION(SourceryRuntime))
+@interface TypeName (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -1256,7 +1256,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime15TypesCollection")
 @end
 
 
-@interface TypesCollection (SWIFT_EXTENSION(SourceryRuntime))
+@interface TypesCollection (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
@@ -1302,7 +1302,7 @@ SWIFT_CLASS("_TtC15SourceryRuntime8Variable")
 @end
 
 
-@interface Variable (SWIFT_EXTENSION(SourceryRuntime))
+@interface Variable (SWIFT_EXTENSION(SourceryRuntime)) <JSExport>
 @end
 
 
