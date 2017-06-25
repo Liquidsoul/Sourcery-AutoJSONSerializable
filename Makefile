@@ -58,6 +58,11 @@ $(SOURCERY):
 
 .PHONY: install sourcery watch test clean xcode ci
 
+.PHONY: download_tools
+## Replace all binary tools with the version specified in the download scripts
+download_tools:
+	scripts/download_sourcery.sh
+
 .PHONY: help
 # taken from this gist https://gist.github.com/rcmachado/af3db315e31383502660
 ## Show this help message.
