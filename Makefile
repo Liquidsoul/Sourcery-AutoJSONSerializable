@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := test
 
-SOURCERY=$(PWD)/.build/release/sourcery
+SOURCERY=$(PWD)/tools/Sourcery/bin/sourcery
 
 ## install dependencies
 install:
@@ -13,11 +13,11 @@ test: sourcery
 	swiftlint
 
 ## run sourcery to generate code from the root templates
-sourcery: $(SOURCERY)
+sourcery:
 	$(SOURCERY)
 
 ## run Sourcery in watch mode for live preview of templates
-watch: $(SOURCERY)
+watch:
 	$(SOURCERY) --watch
 
 ## clean the project build artifacts
@@ -52,9 +52,6 @@ release_pod_minor:
 ## release a new major version of the pod. See `fastlane lanes` for more information
 release_pod_major:
 	bundle exec fastlane release_pod bump_type:major
-
-$(SOURCERY):
-	swift build -c release
 
 .PHONY: install sourcery watch test clean xcode ci
 
