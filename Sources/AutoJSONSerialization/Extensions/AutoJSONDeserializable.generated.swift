@@ -9,15 +9,17 @@ import Foundation
 
 // MARK: - ArrayProperty AutoJSONDeserializable
 extension ArrayProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
-        guard let array = (JSONObject["array"] as? [[String: Any]])?.flatMap(MultiTypesProperties.init(JSONObject:)) else { return nil }
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let array = (JSONObject["array"] as? [Any])?.flatMap(MultiTypesProperties.init(JSONObject:)) else { return nil }
         self.array = array
     }
 }
 
 // MARK: - BasicTypesArrayProperty AutoJSONDeserializable
 extension BasicTypesArrayProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let doubleArray = (JSONObject["doubleArray"] as? [Double]) else { return nil }
         self.doubleArray = doubleArray
         guard let integerArray = (JSONObject["integerArray"] as? [Int]) else { return nil }
@@ -29,7 +31,8 @@ extension BasicTypesArrayProperty: JSONDeserializable {
 
 // MARK: - DateArrayProperty AutoJSONDeserializable
 extension DateArrayProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let dateArray = (JSONObject["dateArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
         self.dateArray = dateArray
     }
@@ -37,7 +40,8 @@ extension DateArrayProperty: JSONDeserializable {
 
 // MARK: - DateProperty AutoJSONDeserializable
 extension DateProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let date = (JSONObject["date"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
         self.date = date
         let optionalDate = (JSONObject["optional_date"] as? String).flatMap(JSONDateFormatter.date(from:))
@@ -47,23 +51,25 @@ extension DateProperty: JSONDeserializable {
 
 // MARK: - JSONDeserializableProperty AutoJSONDeserializable
 extension JSONDeserializableProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
-        guard let entity = (JSONObject["entity"] as? [String: Any]).flatMap(Entity.init(JSONObject:)) else { return nil }
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let entity = (JSONObject["entity"] ).flatMap(Entity.init(JSONObject:)) else { return nil }
         self.entity = entity
-        let optionalEntity = (JSONObject["optionalEntity"] as? [String: Any]).flatMap(Entity.init(JSONObject:))
+        let optionalEntity = (JSONObject["optionalEntity"] ).flatMap(Entity.init(JSONObject:))
         self.optionalEntity = optionalEntity
-        let nilEntity = (JSONObject["nilEntity"] as? [String: Any]).flatMap(Entity.init(JSONObject:))
+        let nilEntity = (JSONObject["nilEntity"] ).flatMap(Entity.init(JSONObject:))
         self.nilEntity = nilEntity
-        guard let annotatedEntity = (JSONObject["annotated_entity"] as? [String: Any]).flatMap(Entity.init(JSONObject:)) else { return nil }
+        guard let annotatedEntity = (JSONObject["annotated_entity"] ).flatMap(Entity.init(JSONObject:)) else { return nil }
         self.annotatedEntity = annotatedEntity
-        let optionalAnnotatedEntity = (JSONObject["optional_annotated_entity"] as? [String: Any]).flatMap(Entity.init(JSONObject:))
+        let optionalAnnotatedEntity = (JSONObject["optional_annotated_entity"] ).flatMap(Entity.init(JSONObject:))
         self.optionalAnnotatedEntity = optionalAnnotatedEntity
     }
 }
 
 // MARK: - JSONDeserializableProperty.Entity AutoJSONDeserializable
 extension JSONDeserializableProperty.Entity: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let name = (JSONObject["name"] as? String) else { return nil }
         self.name = name
     }
@@ -71,7 +77,8 @@ extension JSONDeserializableProperty.Entity: JSONDeserializable {
 
 // MARK: - MultiTypesProperties AutoJSONDeserializable
 extension MultiTypesProperties: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let string = (JSONObject["string"] as? String) else { return nil }
         self.string = string
         guard let integer = (JSONObject["integer"] as? Int) else { return nil }
@@ -87,7 +94,8 @@ extension MultiTypesProperties: JSONDeserializable {
 
 // MARK: - OptionalProperty AutoJSONDeserializable
 extension OptionalProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         let name = (JSONObject["name"] as? String)
         self.name = name
     }
@@ -95,7 +103,8 @@ extension OptionalProperty: JSONDeserializable {
 
 // MARK: - SinglePropertyNoAnnotation AutoJSONDeserializable
 extension SinglePropertyNoAnnotation: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let name = (JSONObject["name"] as? String) else { return nil }
         self.name = name
     }
@@ -103,7 +112,8 @@ extension SinglePropertyNoAnnotation: JSONDeserializable {
 
 // MARK: - SinglePropertyWithKeyPathAnnotation AutoJSONDeserializable
 extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let name = (JSONObject["label"] as? String) else { return nil }
         self.name = name
     }
@@ -111,7 +121,8 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
 
 // MARK: - TypealiasedDateArrayProperty AutoJSONDeserializable
 extension TypealiasedDateArrayProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
         self.momentArray = momentArray
     }
@@ -119,7 +130,8 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
 
 // MARK: - TypealiasedDateProperty AutoJSONDeserializable
 extension TypealiasedDateProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let momentInTime = (JSONObject["momentInTime"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
         self.momentInTime = momentInTime
         let optionalMomentInTime = (JSONObject["optionalMomentInTime"] as? String).flatMap(JSONDateFormatter.date(from:))

@@ -8,7 +8,11 @@ import Foundation
 enum JSONDateFormatter {
     static func date(from string: String) -> Date? {
         if #available(iOS 10.0, macOS 10.12, *) {
+            // [HACK] workaround for unsupported milliseconds part in ISO8601DateFormatter.
+            // "1985-04-12T23:20:50Z" is supported where "1985-04-12T23:20:50.678Z" is not.
+            // So this removes the ".678" part.
             let dateString = string.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+            // [/HACK]
             return isoDateFormatter.date(from: dateString)
         } else {
             return dateFormatter.date(from: string)
