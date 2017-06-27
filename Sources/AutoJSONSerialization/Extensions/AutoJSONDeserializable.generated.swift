@@ -1,8 +1,7 @@
 // Generated using Sourcery 0.6.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
-// swiftlint:disable file_length
-// swiftlint:disable line_length
+// swiftlint:disable cyclomatic_complexity file_length function_body_length line_length
 
 import Foundation
 
@@ -110,6 +109,14 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
     }
 }
 
+// MARK: - TypealiasedDateArrayProperty AutoJSONDeserializable
+extension TypealiasedDateArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: [String: Any]) {
+        guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        self.momentArray = momentArray
+    }
+}
+
 // MARK: - TypealiasedDateProperty AutoJSONDeserializable
 extension TypealiasedDateProperty: JSONDeserializable {
     internal init?(JSONObject: [String: Any]) {
@@ -117,14 +124,6 @@ extension TypealiasedDateProperty: JSONDeserializable {
         self.momentInTime = momentInTime
         let optionalMomentInTime = (JSONObject["optionalMomentInTime"] as? String).flatMap(JSONDateFormatter.date(from:))
         self.optionalMomentInTime = optionalMomentInTime
-    }
-}
-
-// MARK: - TypealiasedDateArrayProperty AutoJSONDeserializable
-extension TypealiasedDateArrayProperty: JSONDeserializable {
-    internal init?(JSONObject: [String: Any]) {
-        guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
-        self.momentArray = momentArray
     }
 }
 

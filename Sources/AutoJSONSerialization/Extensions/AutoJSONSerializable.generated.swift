@@ -1,8 +1,7 @@
 // Generated using Sourcery 0.6.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
-// swiftlint:disable file_length
-// swiftlint:disable line_length
+// swiftlint:disable cyclomatic_complexity file_length function_body_length line_length
 
 import Foundation
 
