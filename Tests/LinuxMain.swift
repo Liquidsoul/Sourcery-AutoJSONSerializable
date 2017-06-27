@@ -37,8 +37,14 @@ extension AutoJSONSerializableTests {
     ("test_BasicTypesArrayPropertySerialization", test_BasicTypesArrayPropertySerialization),
   ]
 }
+extension JSONDateFormatterTests {
+  static var allTests = [
+    ("test_dateFromString", test_dateFromString),
+  ]
+}
 
 XCTMain([
   testCase(AutoJSONDeserializableTests.allTests),
   testCase(AutoJSONSerializableTests.allTests),
+  testCase(JSONDateFormatterTests.allTests),
 ])

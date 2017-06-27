@@ -9,7 +9,8 @@ import Foundation
 enum JSONDateFormatter {
     static func date(from string: String) -> Date? {
         if #available(iOS 10.0, macOS 10.12, *) {
-            return isoDateFormatter.date(from: string)
+            let dateString = string.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+            return isoDateFormatter.date(from: dateString)
         } else {
             return dateFormatter.date(from: string)
         }
