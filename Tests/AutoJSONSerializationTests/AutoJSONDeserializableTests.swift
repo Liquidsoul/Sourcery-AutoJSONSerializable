@@ -160,4 +160,44 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.stringArray, ["A", "B", "C"])
     }
 
+    func test_StringEnumPropertyDeserialization() {
+        let jsonObject: Any = [
+          "enumValue": "sameName",
+          "optionalEnumValue": "assigned_value"
+        ]
+
+        guard let object = StringEnumProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(StringEnum.sameName, object.enumValue)
+        XCTAssertEqual(StringEnum.assignedValue, object.optionalEnumValue)
+    }
+
+    func test_IntEnumPropertyDeserialization() {
+        let jsonObject: Any = [
+          "enumValue": 2,
+          "optionalEnumValue": 4
+        ]
+
+        guard let object = IntEnumProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(IntEnum.two, object.enumValue)
+        XCTAssertEqual(IntEnum.four, object.optionalEnumValue)
+    }
+
+    func test_EnumArrayPropertyDeserialization() {
+        let jsonObject: [String: Any] = [
+          "enumsArray": ["sameName", "assigned_value"]
+        ]
+
+        guard let object = EnumArrayProperty(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(StringEnum.sameName, object.enumsArray.first)
+        XCTAssertEqual(StringEnum.assignedValue, object.enumsArray.last)
+    }
 }

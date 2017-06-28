@@ -49,6 +49,26 @@ extension DateProperty: JSONDeserializable {
     }
 }
 
+// MARK: - EnumArrayProperty AutoJSONDeserializable
+extension EnumArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumsArray = (JSONObject["enumsArray"] as? [String])?.flatMap({ StringEnum(rawValue: $0) }) else { return nil }
+        self.enumsArray = enumsArray
+    }
+}
+
+// MARK: - IntEnumProperty AutoJSONDeserializable
+extension IntEnumProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumValue = (JSONObject["enumValue"] as? Int).flatMap({ IntEnum(rawValue: $0) }) else { return nil }
+        self.enumValue = enumValue
+        let optionalEnumValue = (JSONObject["optionalEnumValue"] as? Int).flatMap({ IntEnum(rawValue: $0) })
+        self.optionalEnumValue = optionalEnumValue
+    }
+}
+
 // MARK: - JSONDeserializableProperty AutoJSONDeserializable
 extension JSONDeserializableProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
@@ -116,6 +136,17 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
         guard let name = (JSONObject["label"] as? String) else { return nil }
         self.name = name
+    }
+}
+
+// MARK: - StringEnumProperty AutoJSONDeserializable
+extension StringEnumProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumValue = (JSONObject["enumValue"] as? String).flatMap({ StringEnum(rawValue: $0) }) else { return nil }
+        self.enumValue = enumValue
+        let optionalEnumValue = (JSONObject["optionalEnumValue"] as? String).flatMap({ StringEnum(rawValue: $0) })
+        self.optionalEnumValue = optionalEnumValue
     }
 }
 
