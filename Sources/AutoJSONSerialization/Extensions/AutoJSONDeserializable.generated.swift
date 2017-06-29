@@ -33,7 +33,7 @@ extension BasicTypesArrayProperty: JSONDeserializable {
 extension DateArrayProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let dateArray = (JSONObject["dateArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let dateArray = (JSONObject["dateArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else { return nil }
         self.dateArray = dateArray
     }
 }
@@ -42,9 +42,9 @@ extension DateArrayProperty: JSONDeserializable {
 extension DateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let date = (JSONObject["date"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let date = (JSONObject["date"] ).flatMap(Date.init(JSONObject:)) else { return nil }
         self.date = date
-        let optionalDate = (JSONObject["optional_date"] as? String).flatMap(JSONDateFormatter.date(from:))
+        let optionalDate = (JSONObject["optional_date"] ).flatMap(Date.init(JSONObject:))
         self.optionalDate = optionalDate
     }
 }
@@ -167,7 +167,7 @@ extension StringEnumProperty: JSONDeserializable {
 extension TypealiasedDateArrayProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let momentArray = (JSONObject["momentArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else { return nil }
         self.momentArray = momentArray
     }
 }
@@ -176,9 +176,9 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
 extension TypealiasedDateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let momentInTime = (JSONObject["momentInTime"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let momentInTime = (JSONObject["momentInTime"] ).flatMap(MomentInTime.init(JSONObject:)) else { return nil }
         self.momentInTime = momentInTime
-        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] as? String).flatMap(JSONDateFormatter.date(from:))
+        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] ).flatMap(MomentInTime.init(JSONObject:))
         self.optionalMomentInTime = optionalMomentInTime
     }
 }
