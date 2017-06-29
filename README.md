@@ -86,12 +86,18 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
 # Features #
 
   * Primitive JSON types (String, Int, Double).
-  * ISO8601 formatted dates.
+  * `RawRepresentable` enums.
+  * Any type implementing `JSONSerializable`/`JSONDeserializable`.
   * Optionals.
   * Nested structures.
-  * Nested types with custom JSONSerializable or JSONDeserializable implementation.
+  * Nested types with custom `JSONSerializable` or `JSONDeserializable` implementation.
+  * Arrays of primitive JSON types, `enum`s and JSON*able types.
   * JSONKey annotation.
-  * Arrays of primitive JSON types, `Date`s and JSON*able types.
+  
+⚠️ `Date`s are not supported out of the box anymore ⚠️ 
+
+Because _almost_ every project use a different date format to communicate with the server the embedded implementation has been removed. You can support `Date`s by providing your implementation.  
+However, you can still find an implementation for `Date`s Serialization/Deserialization using `ISO8601DateFormatter` with milliseconds support in the testing code [here](https://github.com/Liquidsoul/Sourcery-AutoJSONSerializable/blob/master/Sources/AutoJSONSerialization/Date%2BJSONSerialization.swift).
 
 ## Annotations ##
 
@@ -121,7 +127,7 @@ struct Contact {
 
 ## Custom JSON*able Implementation ##
 
-If you want to nest some types that are not currently supported (for example: enums with associated values) or if you want to provide a special implementation of the serde methods for those types, you can simply implement the `JSONSerializable` and/or `JSONDeserializable` protocols.
+If you want to nest some types that are not supported out of the box (e.g. `enum`s with associated values) or if you want to provide a special implementation of the serde methods for those types, you can simply implement the `JSONSerializable` and/or `JSONDeserializable` protocols.
 
 For example, if `Job` is an enum, you can still add it to `Contact`:
 
@@ -139,6 +145,8 @@ enum Job: JSONSerializable {
     }
 }
 ```
+
+You can find some examples in the models I use to test the library in [`Sources/AutoJSONSerialization/Models/`](https://github.com/Liquidsoul/Sourcery-AutoJSONSerializable/tree/master/Sources/AutoJSONSerialization/Models).
 
 # Installation #
 
