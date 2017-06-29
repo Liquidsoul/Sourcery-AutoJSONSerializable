@@ -23,6 +23,7 @@ extension AutoJSONDeserializableTests {
     ("test_StringEnumPropertyDeserialization", test_StringEnumPropertyDeserialization),
     ("test_IntEnumPropertyDeserialization", test_IntEnumPropertyDeserialization),
     ("test_EnumArrayPropertyDeserialization", test_EnumArrayPropertyDeserialization),
+    ("test_EnumWithCustomSerdePropertiesDeserialization", test_EnumWithCustomSerdePropertiesDeserialization),
   ]
 }
 extension AutoJSONSerializableTests {
@@ -41,6 +42,7 @@ extension AutoJSONSerializableTests {
     ("test_StringEnumPropertySerialization", test_StringEnumPropertySerialization),
     ("test_IntEnumPropertySerialization", test_IntEnumPropertySerialization),
     ("test_EnumArrayPropertySerialization", test_EnumArrayPropertySerialization),
+    ("test_EnumWithCustomSerdePropertiesSerialization", test_EnumWithCustomSerdePropertiesSerialization),
   ]
 }
 extension JSONDateFormatterTests {

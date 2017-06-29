@@ -58,6 +58,19 @@ extension EnumArrayProperty: JSONDeserializable {
     }
 }
 
+// MARK: - EnumWithCustomSerdeProperties AutoJSONDeserializable
+extension EnumWithCustomSerdeProperties: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let intEnumUsingStringSerde = (JSONObject["intEnumUsingStringSerde"] ).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else { return nil }
+        self.intEnumUsingStringSerde = intEnumUsingStringSerde
+        guard let customSerdeEnum = (JSONObject["customSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:)) else { return nil }
+        self.customSerdeEnum = customSerdeEnum
+        let optionalCustomSerdeEnum = (JSONObject["optionalCustomSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:))
+        self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
+    }
+}
+
 // MARK: - IntEnumProperty AutoJSONDeserializable
 extension IntEnumProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {

@@ -106,6 +106,20 @@ extension EnumArrayProperty: JSONSerializable {
     }
 }
 
+// MARK: - EnumWithCustomSerdeProperties AutoJSONSerializable
+extension EnumWithCustomSerdeProperties: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let intEnumUsingStringSerde = self.intEnumUsingStringSerde.toJSONObject()
+        jsonObject["intEnumUsingStringSerde"] = intEnumUsingStringSerde
+        let customSerdeEnum = self.customSerdeEnum.toJSONObject()
+        jsonObject["customSerdeEnum"] = customSerdeEnum
+        let optionalCustomSerdeEnum = self.optionalCustomSerdeEnum?.toJSONObject()
+        jsonObject["optionalCustomSerdeEnum"] = optionalCustomSerdeEnum
+        return jsonObject
+    }
+}
+
 // MARK: - IntEnumProperty AutoJSONSerializable
 extension IntEnumProperty: JSONSerializable {
     internal func toJSONObject() -> Any {

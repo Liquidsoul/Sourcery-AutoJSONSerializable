@@ -165,6 +165,19 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(jsonObject), toString(object.toJSONObject()))
     }
 
+    func test_EnumWithCustomSerdePropertiesSerialization() {
+        let object = EnumWithCustomSerdeProperties(intEnumUsingStringSerde: .six,
+                                                   customSerdeEnum: .human(firstName: "Bruce", lastName: "Wayne"),
+                                                   optionalCustomSerdeEnum: .chair)
+        let jsonObject: Any = [
+          "intEnumUsingStringSerde": "6",
+          "customSerdeEnum": "human|Bruce|Wayne",
+          "optionalCustomSerdeEnum": "chair"
+        ]
+
+        XCTAssertEqual(toString(jsonObject), toString(object.toJSONObject()))
+    }
+
     func toString(_ JSONObject: Any) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }

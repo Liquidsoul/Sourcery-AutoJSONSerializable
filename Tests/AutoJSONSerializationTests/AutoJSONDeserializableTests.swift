@@ -200,4 +200,21 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(StringEnum.sameName, object.enumsArray.first)
         XCTAssertEqual(StringEnum.assignedValue, object.enumsArray.last)
     }
+
+    func test_EnumWithCustomSerdePropertiesDeserialization() {
+        let jsonObject: Any = [
+          "intEnumUsingStringSerde": "6",
+          "customSerdeEnum": "human|Bruce|Wayne",
+          "optionalCustomSerdeEnum": "chair"
+        ]
+
+        guard let object = EnumWithCustomSerdeProperties(JSONObject: jsonObject) else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(IntEnumUsingStringSerde.six, object.intEnumUsingStringSerde)
+        XCTAssertEqual(CustomSerdeEnum.human(firstName: "Bruce", lastName: "Wayne"), object.customSerdeEnum)
+        XCTAssertEqual(CustomSerdeEnum.chair, object.optionalCustomSerdeEnum)
+    }
+
 }
