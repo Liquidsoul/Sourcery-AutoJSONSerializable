@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := test
 
-SOURCERY=$(PWD)/.build/release/sourcery
+SOURCERY=$(PWD)/tools/Sourcery/bin/sourcery
 
 ## install dependencies
 install:
@@ -13,11 +13,11 @@ test: sourcery
 	swiftlint
 
 ## run sourcery to generate code from the root templates
-sourcery: $(SOURCERY)
+sourcery:
 	$(SOURCERY)
 
 ## run Sourcery in watch mode for live preview of templates
-watch: $(SOURCERY)
+watch:
 	$(SOURCERY) --watch
 
 ## clean the project build artifacts
@@ -53,10 +53,12 @@ release_pod_minor:
 release_pod_major:
 	bundle exec fastlane release_pod bump_type:major
 
-$(SOURCERY):
-	swift build -c release
-
 .PHONY: install sourcery watch test clean xcode ci
+
+.PHONY: download_tools
+## Replace all binary tools with the version specified in the download scripts
+download_tools:
+	scripts/download_sourcery.sh
 
 .PHONY: help
 # taken from this gist https://gist.github.com/rcmachado/af3db315e31383502660
