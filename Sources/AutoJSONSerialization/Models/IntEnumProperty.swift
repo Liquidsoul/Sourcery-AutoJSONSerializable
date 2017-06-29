@@ -5,7 +5,7 @@ enum IntEnum: Int {
     case four = 4
 }
 
-struct IntEnumProperty: AutoJSONDeserializable {
+struct IntEnumProperty: AutoJSONSerializable, AutoJSONDeserializable {
     let enumValue: IntEnum
     let optionalEnumValue: IntEnum?
 }

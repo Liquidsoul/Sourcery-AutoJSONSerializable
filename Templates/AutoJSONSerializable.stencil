@@ -55,9 +55,11 @@ extension {{ type.name }}: JSONSerializable {
         var jsonObject = [String: Any]()
         {% for variable in type.storedVariables %}
         {% ifnot variable.isArray %}
-        let {{ variable.name }} = self.{{ variable.name }}{% if variable.type.implements.AutoJSONSerializable or variable.type.implements.JSONSerializable %}{% if variable.isOptional %}?{%endif%}.toJSONObject(){% else %}{%if variable.actualTypeName.unwrappedTypeName == "Date" %}{% if variable.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %}
+        {% set optionalTrait %}{% if variable.isOptional %}?{%endif%}{% endset %}
+        let {{ variable.name }} = self.{{ variable.name }}{% if variable.type.implements.AutoJSONSerializable or variable.type.implements.JSONSerializable %}{{ optionalTrait }}.toJSONObject(){% else %}{%if variable.actualTypeName.unwrappedTypeName == "Date" %}{{ optionalTrait }}.iso8601String(){% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ optionalTrait }}.rawValue{% endif %}{%endif%}{% endif %}
         {% else %}
-        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType.implements.AutoJSONSerializable or variable.typeName.array.elementType.implements.JSONSerializable %}.toJSONObject(){% else %}{%if variable.typeName.array.elementTypeName.unwrappedTypeName == "Date" %}{% if variable.typeName.array.elementTypeName.isOptional %}?{%endif%}.iso8601String(){%endif%}{% endif %} }
+        {% set optionalTrait %}{% if variable.typeName.array.elementTypeName.isOptional %}?{%endif%}{% endset %}
+        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType.implements.AutoJSONSerializable or variable.typeName.array.elementType.implements.JSONSerializable %}.toJSONObject(){% else %}{%if variable.typeName.array.elementTypeName.unwrappedTypeName == "Date" %}{{ optionalTrait }}.iso8601String(){% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}{{ optionalTrait }}.rawValue{% endif %}{%endif%}{% endif %} }
         {% endif %}
         jsonObject["{{ variable.annotations.JSONKey|default:variable.name }}"] = {{ variable.name }}
         {% endfor %}

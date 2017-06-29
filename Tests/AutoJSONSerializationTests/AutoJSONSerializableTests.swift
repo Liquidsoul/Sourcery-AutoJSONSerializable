@@ -135,6 +135,36 @@ class AutoJSONSerializableTests: XCTestCase {
         XCTAssertEqual(toString(object.toJSONObject()), toString(jsonObject))
     }
 
+    func test_StringEnumPropertySerialization() {
+        let object = StringEnumProperty(enumValue: .sameName,
+                                        optionalEnumValue: .assignedValue)
+        let jsonObject: Any = [
+          "enumValue": "sameName",
+          "optionalEnumValue": "assigned_value"
+        ]
+
+        XCTAssertEqual(toString(jsonObject), toString(object.toJSONObject()))
+    }
+
+    func test_IntEnumPropertySerialization() {
+        let object = IntEnumProperty(enumValue: .two, optionalEnumValue: .four)
+        let jsonObject: Any = [
+          "enumValue": 2,
+          "optionalEnumValue": 4
+        ]
+
+        XCTAssertEqual(toString(jsonObject), toString(object.toJSONObject()))
+    }
+
+    func test_EnumArrayPropertySerialization() {
+        let object = EnumArrayProperty(enumsArray: [.sameName, .assignedValue])
+        let jsonObject: [String: Any] = [
+          "enumsArray": ["sameName", "assigned_value"]
+        ]
+
+        XCTAssertEqual(toString(jsonObject), toString(object.toJSONObject()))
+    }
+
     func toString(_ JSONObject: Any) -> String? {
         return (try? JSONSerialization.data(withJSONObject: JSONObject)).flatMap({String(data: $0, encoding: .utf8)})
     }

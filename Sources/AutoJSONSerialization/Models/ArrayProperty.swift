@@ -19,6 +19,6 @@ struct BasicTypesArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let stringArray: [String]
 }
 
-struct EnumArrayProperty: AutoJSONDeserializable {
+struct EnumArrayProperty: AutoJSONSerializable, AutoJSONDeserializable {
     let enumsArray: [StringEnum]
 }

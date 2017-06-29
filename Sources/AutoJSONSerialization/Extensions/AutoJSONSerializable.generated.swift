@@ -96,6 +96,28 @@ extension DateProperty: JSONSerializable {
     }
 }
 
+// MARK: - EnumArrayProperty AutoJSONSerializable
+extension EnumArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumsArray = self.enumsArray.map { $0.rawValue }
+        jsonObject["enumsArray"] = enumsArray
+        return jsonObject
+    }
+}
+
+// MARK: - IntEnumProperty AutoJSONSerializable
+extension IntEnumProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumValue = self.enumValue.rawValue
+        jsonObject["enumValue"] = enumValue
+        let optionalEnumValue = self.optionalEnumValue?.rawValue
+        jsonObject["optionalEnumValue"] = optionalEnumValue
+        return jsonObject
+    }
+}
+
 // MARK: - JSONDeserializableProperty AutoJSONSerializable
 extension JSONDeserializableProperty: JSONSerializable {
     internal func toJSONObject() -> Any {
@@ -168,6 +190,18 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["label"] = name
+        return jsonObject
+    }
+}
+
+// MARK: - StringEnumProperty AutoJSONSerializable
+extension StringEnumProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumValue = self.enumValue.rawValue
+        jsonObject["enumValue"] = enumValue
+        let optionalEnumValue = self.optionalEnumValue?.rawValue
+        jsonObject["optionalEnumValue"] = optionalEnumValue
         return jsonObject
     }
 }

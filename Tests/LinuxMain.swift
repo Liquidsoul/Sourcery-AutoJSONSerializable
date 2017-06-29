@@ -38,6 +38,9 @@ extension AutoJSONSerializableTests {
     ("test_DateArrayPropertySerialization", test_DateArrayPropertySerialization),
     ("test_TypealiasedDateArrayPropertySerialization", test_TypealiasedDateArrayPropertySerialization),
     ("test_BasicTypesArrayPropertySerialization", test_BasicTypesArrayPropertySerialization),
+    ("test_StringEnumPropertySerialization", test_StringEnumPropertySerialization),
+    ("test_IntEnumPropertySerialization", test_IntEnumPropertySerialization),
+    ("test_EnumArrayPropertySerialization", test_EnumArrayPropertySerialization),
   ]
 }
 extension JSONDateFormatterTests {
