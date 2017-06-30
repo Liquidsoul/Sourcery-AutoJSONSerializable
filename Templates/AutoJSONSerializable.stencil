@@ -51,7 +51,7 @@ extension Date {
 // MARK: - {{ type.name }} AutoJSONSerializable
 extension {{ type.name }}: JSONSerializable {
 {% if type.supertype.implements.AutoJSONSerializable %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONSerializable {% endif %}
-    {{ type.accessLevel }} func toJSONObject() -> [String: Any] {
+    {{ type.accessLevel }} func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         {% for variable in type.storedVariables %}
         {% ifnot variable.isArray %}

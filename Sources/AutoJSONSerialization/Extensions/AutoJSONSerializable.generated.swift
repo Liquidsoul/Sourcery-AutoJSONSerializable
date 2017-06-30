@@ -8,7 +8,11 @@ import Foundation
 enum JSONDateFormatter {
     static func date(from string: String) -> Date? {
         if #available(iOS 10.0, macOS 10.12, *) {
+            // [HACK] workaround for unsupported milliseconds part in ISO8601DateFormatter.
+            // "1985-04-12T23:20:50Z" is supported where "1985-04-12T23:20:50.678Z" is not.
+            // So this removes the ".678" part.
             let dateString = string.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+            // [/HACK]
             return isoDateFormatter.date(from: dateString)
         } else {
             return dateFormatter.date(from: string)
@@ -48,7 +52,7 @@ extension Date {
 
 // MARK: - ArrayProperty AutoJSONSerializable
 extension ArrayProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let array = self.array.map { $0.toJSONObject() }
         jsonObject["array"] = array
@@ -58,7 +62,7 @@ extension ArrayProperty: JSONSerializable {
 
 // MARK: - BasicTypesArrayProperty AutoJSONSerializable
 extension BasicTypesArrayProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let doubleArray = self.doubleArray.map { $0 }
         jsonObject["doubleArray"] = doubleArray
@@ -72,7 +76,7 @@ extension BasicTypesArrayProperty: JSONSerializable {
 
 // MARK: - DateArrayProperty AutoJSONSerializable
 extension DateArrayProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let dateArray = self.dateArray.map { $0.iso8601String() }
         jsonObject["dateArray"] = dateArray
@@ -82,7 +86,7 @@ extension DateArrayProperty: JSONSerializable {
 
 // MARK: - DateProperty AutoJSONSerializable
 extension DateProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let date = self.date.iso8601String()
         jsonObject["date"] = date
@@ -94,7 +98,7 @@ extension DateProperty: JSONSerializable {
 
 // MARK: - JSONDeserializableProperty AutoJSONSerializable
 extension JSONDeserializableProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let entity = self.entity.toJSONObject()
         jsonObject["entity"] = entity
@@ -112,7 +116,7 @@ extension JSONDeserializableProperty: JSONSerializable {
 
 // MARK: - JSONDeserializableProperty.Entity AutoJSONSerializable
 extension JSONDeserializableProperty.Entity: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["name"] = name
@@ -122,7 +126,7 @@ extension JSONDeserializableProperty.Entity: JSONSerializable {
 
 // MARK: - MultiTypesProperties AutoJSONSerializable
 extension MultiTypesProperties: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let string = self.string
         jsonObject["string"] = string
@@ -140,7 +144,7 @@ extension MultiTypesProperties: JSONSerializable {
 
 // MARK: - OptionalProperty AutoJSONSerializable
 extension OptionalProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["name"] = name
@@ -150,7 +154,7 @@ extension OptionalProperty: JSONSerializable {
 
 // MARK: - SinglePropertyNoAnnotation AutoJSONSerializable
 extension SinglePropertyNoAnnotation: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["name"] = name
@@ -160,7 +164,7 @@ extension SinglePropertyNoAnnotation: JSONSerializable {
 
 // MARK: - SinglePropertyWithKeyPathAnnotation AutoJSONSerializable
 extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let name = self.name
         jsonObject["label"] = name
@@ -170,7 +174,7 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
 
 // MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
 extension TypealiasedDateArrayProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let momentArray = self.momentArray.map { $0.iso8601String() }
         jsonObject["momentArray"] = momentArray
@@ -180,7 +184,7 @@ extension TypealiasedDateArrayProperty: JSONSerializable {
 
 // MARK: - TypealiasedDateProperty AutoJSONSerializable
 extension TypealiasedDateProperty: JSONSerializable {
-    internal func toJSONObject() -> [String: Any] {
+    internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
         let momentInTime = self.momentInTime.iso8601String()
         jsonObject["momentInTime"] = momentInTime

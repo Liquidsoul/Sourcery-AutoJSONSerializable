@@ -1,5 +1,5 @@
 protocol AutoJSONDeserializable {}
 
 protocol JSONDeserializable {
-    init?(JSONObject: [String: Any])
+    init?(JSONObject: Any)
 }
