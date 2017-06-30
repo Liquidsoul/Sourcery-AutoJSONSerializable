@@ -30,12 +30,11 @@ xcode: sourcery
 	open AutoJSONSerialization.xcodeproj
 
 XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
-				-scheme 'AutoJSONSerialization' \
-				-enableCodeCoverage YES
+				-scheme 'AutoJSONSerialization'
 
 ## setup the environment and run the tests using the Xcode generated project to generate code coverage
 ci: install test
-	swift package generate-xcodeproj
+	swift package generate-xcodeproj --enable-code-coverage
 	xcodebuild $(XCODEFLAGS) test
 
 .PHONY: release_pod_patch
