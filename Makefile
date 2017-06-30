@@ -9,7 +9,7 @@ install:
 ## build the project and run the tests
 test: sourcery
 	cd Tests; $(SOURCERY)
-	swift test
+	swift test -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
 	swiftlint
 
 ## run sourcery to generate code from the root templates
@@ -30,7 +30,8 @@ xcode: sourcery
 	open AutoJSONSerialization.xcodeproj
 
 XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
-				-scheme 'AutoJSONSerialization'
+				-scheme 'AutoJSONSerialization' \
+				MACOSX_DEPLOYMENT_TARGET=10.12
 
 ## setup the environment and run the tests using the Xcode generated project to generate code coverage
 ci: install test
