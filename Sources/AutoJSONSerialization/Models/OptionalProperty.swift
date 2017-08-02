@@ -1,3 +1,4 @@
-struct OptionalProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct OptionalProperty {
     let name: String?
 }
