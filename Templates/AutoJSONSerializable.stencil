@@ -1,6 +1,9 @@
 // swiftlint:disable cyclomatic_complexity file_length function_body_length line_length
 
 import Foundation
+{% ifnot argument.removePodImport %}
+import Sourcery_AutoJSONSerializable
+{% endif %}
 
 // MARK: - AutoJSONSerializable for classes, protocols, structs
 {% for type in types.all|annotated:"AutoJSONSerializable" %}
