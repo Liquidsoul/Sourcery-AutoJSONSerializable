@@ -1,5 +1,5 @@
-protocol AutoJSONDeserializable {}
+public protocol AutoJSONDeserializable {}
 
-protocol JSONDeserializable {
+public protocol JSONDeserializable {
     init?(JSONObject: Any)
 }

@@ -1,5 +1,5 @@
-protocol AutoJSONSerializable {}
+public protocol AutoJSONSerializable {}
 
-protocol JSONSerializable {
+public protocol JSONSerializable {
     func toJSONObject() -> Any
 }
