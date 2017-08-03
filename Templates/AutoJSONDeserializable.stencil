@@ -16,8 +16,8 @@ extension {{ type.name }}: JSONDeserializable {
         {% macro Optional arg %}guard {{ arg }} else { return nil }{% endmacro %}
         {% for variable in type.storedVariables %}
         {% ifnot variable.isArray %}
-        {% set castType %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.implements.JSONDeserializable %}{% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ variable.type.rawTypeName.name }}{% else %}{{ variable.unwrappedTypeName }}{% endif %}{% endif %}{% endset %}
-        {% set itemOperation %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.implements.JSONDeserializable %}.flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}.flatMap({ {{ variable.actualTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
+        {% set castType %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}{% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ variable.type.rawTypeName.name }}{% else %}{{ variable.unwrappedTypeName }}{% endif %}{% endif %}{% endset %}
+        {% set itemOperation %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}.flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}.flatMap({ {{ variable.actualTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
         {% set Assignment %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.JSONKey|default:variable.name }}"] {% if castType %}as? {% endif %}{{ castType }}){{ itemOperation }}{% endset %}
         {% if variable.isOptional %}
         {{ Assignment }}
@@ -25,8 +25,8 @@ extension {{ type.name }}: JSONDeserializable {
         {% call Optional Assignment %}
         {% endif %}
         {% else %}
-        {% set castType %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.implements.JSONDeserializable %}[Any]{% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}[{{ variable.typeName.array.elementType.rawTypeName.name }}]{% else %}{{ variable.typeName }}{% endif %}{% endif %}{% endset %}
-        {% set itemOperation %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.implements.JSONDeserializable %}?.flatMap({{ variable.typeName.array.elementTypeName.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}?.flatMap({ {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
+        {% set castType %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}[Any]{% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}[{{ variable.typeName.array.elementType.rawTypeName.name }}]{% else %}{{ variable.typeName }}{% endif %}{% endif %}{% endset %}
+        {% set itemOperation %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}?.flatMap({{ variable.typeName.array.elementTypeName.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}?.flatMap({ {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
         {% set Assignment %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.JSONKey|default:variable.name }}"] as? {{ castType }}){{ itemOperation }}{% endset %}
         {% if variable.isOptional %}
         {{ Assignment }}

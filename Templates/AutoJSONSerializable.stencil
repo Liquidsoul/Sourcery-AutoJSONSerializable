@@ -16,10 +16,10 @@ extension {{ type.name }}: JSONSerializable {
         {% for variable in type.storedVariables %}
         {% ifnot variable.isArray %}
         {% set optionalTrait %}{% if variable.isOptional %}?{%endif%}{% endset %}
-        let {{ variable.name }} = self.{{ variable.name }}{% if variable.type|annotated:"AutoJSONSerializable" or variable.type.implements.JSONSerializable %}{{ optionalTrait }}.toJSONObject(){% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ optionalTrait }}.rawValue{%endif%}{% endif %}
+        let {{ variable.name }} = self.{{ variable.name }}{% if variable.type|annotated:"AutoJSONSerializable" or variable.type.based.JSONSerializable %}{{ optionalTrait }}.toJSONObject(){% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ optionalTrait }}.rawValue{%endif%}{% endif %}
         {% else %}
         {% set optionalTrait %}{% if variable.typeName.array.elementTypeName.isOptional %}?{%endif%}{% endset %}
-        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType|annotated:"AutoJSONSerializable" or variable.typeName.array.elementType.implements.JSONSerializable %}.toJSONObject(){% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}{{ optionalTrait }}.rawValue{% endif %}{%endif%} }
+        let {{ variable.name }} = self.{{ variable.name }}.map { $0{% if variable.typeName.array.elementType|annotated:"AutoJSONSerializable" or variable.typeName.array.elementType.based.JSONSerializable %}.toJSONObject(){% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}{{ optionalTrait }}.rawValue{% endif %}{%endif%} }
         {% endif %}
         jsonObject["{{ variable.annotations.JSONKey|default:variable.name }}"] = {{ variable.name }}
         {% endfor %}
