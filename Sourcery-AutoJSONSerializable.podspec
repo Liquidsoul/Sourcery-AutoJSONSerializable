@@ -16,4 +16,10 @@ Pod::Spec.new do |s|
 
   s.preserve_paths = 'Templates'
   s.source_files = 'Sources/AutoJSONSerialization/JSONSerializable.swift', 'Sources/AutoJSONSerialization/JSONDeserializable.swift'
+
+  s.subspec 'Date' do |date|
+    date.ios.deployment_target = '10.0'
+    date.osx.deployment_target = '10.12'
+    date.source_files = 'Sources/AutoJSONSerialization/Date+JSONSerialization.swift'
+  end
 end
