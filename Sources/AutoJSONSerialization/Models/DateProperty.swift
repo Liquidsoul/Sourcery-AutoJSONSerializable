@@ -1,6 +1,7 @@
 import Foundation
 
-struct DateProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct DateProperty {
     let date: Date
     // sourcery: JSONKey = "optional_date"
     let optionalDate: Date?
@@ -8,7 +9,8 @@ struct DateProperty: AutoJSONDeserializable, AutoJSONSerializable {
 
 typealias MomentInTime = Date
 
-struct TypealiasedDateProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct TypealiasedDateProperty {
     let momentInTime: MomentInTime
     let optionalMomentInTime: MomentInTime?
 }

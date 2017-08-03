@@ -1,13 +1,13 @@
 import Foundation
 
 extension Date: JSONSerializable {
-    func toJSONObject() -> Any {
+    public func toJSONObject() -> Any {
         return JSONDateFormatter.string(from: self)
     }
 }
 
 extension Date: JSONDeserializable {
-    init?(JSONObject: Any) {
+    public init?(JSONObject: Any) {
         guard let dateString = JSONObject as? String,
               let date = JSONDateFormatter.date(from: dateString) else {
             return nil

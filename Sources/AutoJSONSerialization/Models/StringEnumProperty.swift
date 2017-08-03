@@ -4,7 +4,8 @@ enum StringEnum: String {
     case assignedValue = "assigned_value"
 }
 
-struct StringEnumProperty: AutoJSONSerializable, AutoJSONDeserializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct StringEnumProperty {
     let enumValue: StringEnum
     let optionalEnumValue: StringEnum?
 }

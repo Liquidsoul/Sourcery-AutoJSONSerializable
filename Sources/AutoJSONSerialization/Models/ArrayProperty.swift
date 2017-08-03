@@ -1,24 +1,29 @@
 import Foundation
 
-struct ArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct ArrayProperty {
     let array: [MultiTypesProperties]
 }
 
-struct DateArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct DateArrayProperty {
     let dateArray: [Date]
 }
 
-struct TypealiasedDateArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct TypealiasedDateArrayProperty {
     typealias Moment = Date
     let momentArray: [Moment]
 }
 
-struct BasicTypesArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct BasicTypesArrayProperty {
     let doubleArray: [Double]
     let integerArray: [Int]
     let stringArray: [String]
 }
 
-struct EnumArrayProperty: AutoJSONSerializable, AutoJSONDeserializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct EnumArrayProperty {
     let enumsArray: [StringEnum]
 }

@@ -1,4 +1,5 @@
-struct JSONDeserializableProperty: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct JSONDeserializableProperty {
     let entity: Entity
     let optionalEntity: Entity?
     let nilEntity: Entity?
@@ -7,7 +8,8 @@ struct JSONDeserializableProperty: AutoJSONDeserializable, AutoJSONSerializable 
     // sourcery: JSONKey = "optional_annotated_entity"
     let optionalAnnotatedEntity: Entity?
 
-    struct Entity: AutoJSONDeserializable, AutoJSONSerializable {
+    // sourcery: AutoJSONDeserializable, AutoJSONSerializable
+    struct Entity {
         let name: String
     }
 }

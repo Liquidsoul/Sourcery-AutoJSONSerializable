@@ -1,4 +1,5 @@
-struct MultiTypesProperties: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct MultiTypesProperties {
     let string: String
     let integer: Int
     let optionalInteger: Int?

@@ -54,7 +54,8 @@ extension CustomSerdeEnum: Equatable {
     }
 }
 
-struct EnumWithCustomSerdeProperties: AutoJSONDeserializable, AutoJSONSerializable {
+// sourcery: AutoJSONDeserializable, AutoJSONSerializable
+struct EnumWithCustomSerdeProperties {
     let intEnumUsingStringSerde: IntEnumUsingStringSerde
     let customSerdeEnum: CustomSerdeEnum
     let optionalCustomSerdeEnum: CustomSerdeEnum?
