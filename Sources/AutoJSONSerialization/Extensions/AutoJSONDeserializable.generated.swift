@@ -33,7 +33,7 @@ extension BasicTypesArrayProperty: JSONDeserializable {
 extension DateArrayProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let dateArray = (JSONObject["dateArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let dateArray = (JSONObject["dateArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else { return nil }
         self.dateArray = dateArray
     }
 }
@@ -42,10 +42,43 @@ extension DateArrayProperty: JSONDeserializable {
 extension DateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let date = (JSONObject["date"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let date = (JSONObject["date"] ).flatMap(Date.init(JSONObject:)) else { return nil }
         self.date = date
-        let optionalDate = (JSONObject["optional_date"] as? String).flatMap(JSONDateFormatter.date(from:))
+        let optionalDate = (JSONObject["optional_date"] ).flatMap(Date.init(JSONObject:))
         self.optionalDate = optionalDate
+    }
+}
+
+// MARK: - EnumArrayProperty AutoJSONDeserializable
+extension EnumArrayProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumsArray = (JSONObject["enumsArray"] as? [String])?.flatMap({ StringEnum(rawValue: $0) }) else { return nil }
+        self.enumsArray = enumsArray
+    }
+}
+
+// MARK: - EnumWithCustomSerdeProperties AutoJSONDeserializable
+extension EnumWithCustomSerdeProperties: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let intEnumUsingStringSerde = (JSONObject["intEnumUsingStringSerde"] ).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else { return nil }
+        self.intEnumUsingStringSerde = intEnumUsingStringSerde
+        guard let customSerdeEnum = (JSONObject["customSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:)) else { return nil }
+        self.customSerdeEnum = customSerdeEnum
+        let optionalCustomSerdeEnum = (JSONObject["optionalCustomSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:))
+        self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
+    }
+}
+
+// MARK: - IntEnumProperty AutoJSONDeserializable
+extension IntEnumProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumValue = (JSONObject["enumValue"] as? Int).flatMap({ IntEnum(rawValue: $0) }) else { return nil }
+        self.enumValue = enumValue
+        let optionalEnumValue = (JSONObject["optionalEnumValue"] as? Int).flatMap({ IntEnum(rawValue: $0) })
+        self.optionalEnumValue = optionalEnumValue
     }
 }
 
@@ -119,11 +152,22 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
     }
 }
 
+// MARK: - StringEnumProperty AutoJSONDeserializable
+extension StringEnumProperty: JSONDeserializable {
+    internal init?(JSONObject: Any) {
+        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
+        guard let enumValue = (JSONObject["enumValue"] as? String).flatMap({ StringEnum(rawValue: $0) }) else { return nil }
+        self.enumValue = enumValue
+        let optionalEnumValue = (JSONObject["optionalEnumValue"] as? String).flatMap({ StringEnum(rawValue: $0) })
+        self.optionalEnumValue = optionalEnumValue
+    }
+}
+
 // MARK: - TypealiasedDateArrayProperty AutoJSONDeserializable
 extension TypealiasedDateArrayProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let momentArray = (JSONObject["momentArray"] as? [String])?.flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let momentArray = (JSONObject["momentArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else { return nil }
         self.momentArray = momentArray
     }
 }
@@ -132,9 +176,9 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
 extension TypealiasedDateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let momentInTime = (JSONObject["momentInTime"] as? String).flatMap(JSONDateFormatter.date(from:)) else { return nil }
+        guard let momentInTime = (JSONObject["momentInTime"] ).flatMap(MomentInTime.init(JSONObject:)) else { return nil }
         self.momentInTime = momentInTime
-        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] as? String).flatMap(JSONDateFormatter.date(from:))
+        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] ).flatMap(MomentInTime.init(JSONObject:))
         self.optionalMomentInTime = optionalMomentInTime
     }
 }

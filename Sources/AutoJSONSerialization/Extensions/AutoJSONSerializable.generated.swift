@@ -5,49 +5,6 @@
 
 import Foundation
 
-enum JSONDateFormatter {
-    static func date(from string: String) -> Date? {
-        if #available(iOS 10.0, macOS 10.12, *) {
-            // [HACK] workaround for unsupported milliseconds part in ISO8601DateFormatter.
-            // "1985-04-12T23:20:50Z" is supported where "1985-04-12T23:20:50.678Z" is not.
-            // So this removes the ".678" part.
-            let dateString = string.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
-            // [/HACK]
-            return isoDateFormatter.date(from: dateString)
-        } else {
-            return dateFormatter.date(from: string)
-        }
-    }
-
-    static func string(from date: Date) -> String {
-        if #available(iOS 10.0, macOS 10.12, *) {
-            return isoDateFormatter.string(from: date)
-        } else {
-            return dateFormatter.string(from: date)
-        }
-    }
-
-    @available(iOS 10.0, macOS 10.12, *)
-    private static let isoDateFormatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = .withInternetDateTime
-        return formatter
-    }()
-
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        return formatter
-    }()
-}
-
-extension Date {
-    func iso8601String() -> String {
-        return JSONDateFormatter.string(from: self)
-    }
-}
-
 // MARK: - AutoJSONSerializable for classes, protocols, structs
 
 // MARK: - ArrayProperty AutoJSONSerializable
@@ -78,7 +35,7 @@ extension BasicTypesArrayProperty: JSONSerializable {
 extension DateArrayProperty: JSONSerializable {
     internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
-        let dateArray = self.dateArray.map { $0.iso8601String() }
+        let dateArray = self.dateArray.map { $0.toJSONObject() }
         jsonObject["dateArray"] = dateArray
         return jsonObject
     }
@@ -88,10 +45,46 @@ extension DateArrayProperty: JSONSerializable {
 extension DateProperty: JSONSerializable {
     internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
-        let date = self.date.iso8601String()
+        let date = self.date.toJSONObject()
         jsonObject["date"] = date
-        let optionalDate = self.optionalDate?.iso8601String()
+        let optionalDate = self.optionalDate?.toJSONObject()
         jsonObject["optional_date"] = optionalDate
+        return jsonObject
+    }
+}
+
+// MARK: - EnumArrayProperty AutoJSONSerializable
+extension EnumArrayProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumsArray = self.enumsArray.map { $0.rawValue }
+        jsonObject["enumsArray"] = enumsArray
+        return jsonObject
+    }
+}
+
+// MARK: - EnumWithCustomSerdeProperties AutoJSONSerializable
+extension EnumWithCustomSerdeProperties: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let intEnumUsingStringSerde = self.intEnumUsingStringSerde.toJSONObject()
+        jsonObject["intEnumUsingStringSerde"] = intEnumUsingStringSerde
+        let customSerdeEnum = self.customSerdeEnum.toJSONObject()
+        jsonObject["customSerdeEnum"] = customSerdeEnum
+        let optionalCustomSerdeEnum = self.optionalCustomSerdeEnum?.toJSONObject()
+        jsonObject["optionalCustomSerdeEnum"] = optionalCustomSerdeEnum
+        return jsonObject
+    }
+}
+
+// MARK: - IntEnumProperty AutoJSONSerializable
+extension IntEnumProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumValue = self.enumValue.rawValue
+        jsonObject["enumValue"] = enumValue
+        let optionalEnumValue = self.optionalEnumValue?.rawValue
+        jsonObject["optionalEnumValue"] = optionalEnumValue
         return jsonObject
     }
 }
@@ -172,11 +165,23 @@ extension SinglePropertyWithKeyPathAnnotation: JSONSerializable {
     }
 }
 
+// MARK: - StringEnumProperty AutoJSONSerializable
+extension StringEnumProperty: JSONSerializable {
+    internal func toJSONObject() -> Any {
+        var jsonObject = [String: Any]()
+        let enumValue = self.enumValue.rawValue
+        jsonObject["enumValue"] = enumValue
+        let optionalEnumValue = self.optionalEnumValue?.rawValue
+        jsonObject["optionalEnumValue"] = optionalEnumValue
+        return jsonObject
+    }
+}
+
 // MARK: - TypealiasedDateArrayProperty AutoJSONSerializable
 extension TypealiasedDateArrayProperty: JSONSerializable {
     internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
-        let momentArray = self.momentArray.map { $0.iso8601String() }
+        let momentArray = self.momentArray.map { $0.toJSONObject() }
         jsonObject["momentArray"] = momentArray
         return jsonObject
     }
@@ -186,9 +191,9 @@ extension TypealiasedDateArrayProperty: JSONSerializable {
 extension TypealiasedDateProperty: JSONSerializable {
     internal func toJSONObject() -> Any {
         var jsonObject = [String: Any]()
-        let momentInTime = self.momentInTime.iso8601String()
+        let momentInTime = self.momentInTime.toJSONObject()
         jsonObject["momentInTime"] = momentInTime
-        let optionalMomentInTime = self.optionalMomentInTime?.iso8601String()
+        let optionalMomentInTime = self.optionalMomentInTime?.toJSONObject()
         jsonObject["optionalMomentInTime"] = optionalMomentInTime
         return jsonObject
     }

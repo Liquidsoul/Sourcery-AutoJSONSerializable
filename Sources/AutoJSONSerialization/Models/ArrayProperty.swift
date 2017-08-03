@@ -18,3 +18,7 @@ struct BasicTypesArrayProperty: AutoJSONDeserializable, AutoJSONSerializable {
     let integerArray: [Int]
     let stringArray: [String]
 }
+
+struct EnumArrayProperty: AutoJSONSerializable, AutoJSONDeserializable {
+    let enumsArray: [StringEnum]
+}
