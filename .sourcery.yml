@@ -5,3 +5,5 @@ templates:
 output:
   Sources/AutoJSONSerialization/Extensions/
 prune: true
+args:
+  removePodImport: true

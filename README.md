@@ -50,12 +50,13 @@ protocol JSONSerializable {
 ```
 
 With this tool, you do not need to implement these protocols, the Sourcery templates will do the boiler plate code for you.  
-To do this, all you need to do is conform to one (or both) of these protocols:
+To do this, all you need to do is add sourcery annotations to you `struct`s:
 
 ``` swift
-protocol AutoJSONDeserializable {}
-
-protocol AutoJSONSerializable {}
+// sourcery: AutoJSONSerializable, AutoJSONDeserializable
+struct Contact {
+    // ...
+}
 ```
 
 And then run Sourcery using the templates found in the `Templates/` folder of this repository.
@@ -73,7 +74,7 @@ struct Contact {
 }
 ```
 
-Making it conform to AutoJSONDeserializable would result make it support this JSON:
+Adding the `AutoJSONDeserializable` annotation would make it initializable from this JSON data:
 
 ``` json
 {
@@ -94,12 +95,14 @@ Making it conform to AutoJSONDeserializable would result make it support this JS
   * Arrays of primitive JSON types, `enum`s and JSON*able types.
   * JSONKey annotation.
   
+⚠️ This system does not support `class` types because an extension can only declare `convenience` initializers ⚠️
+
 ⚠️ `Date`s are not supported out of the box anymore ⚠️ 
 
 Because _almost_ every project use a different date format to communicate with the server the embedded implementation has been removed. You can support `Date`s by providing your implementation.  
 However, you can still find an implementation for `Date`s Serialization/Deserialization using `ISO8601DateFormatter` with milliseconds support in the testing code [here](https://github.com/Liquidsoul/Sourcery-AutoJSONSerializable/blob/master/Sources/AutoJSONSerialization/Date%2BJSONSerialization.swift).
 
-## Annotations ##
+## Attributes annotations ##
 
 When mapping your JSON to your model structure, you may sometimes want to use a different attribute name as the one in the JSON file.  
 Let's say you have this JSON:
@@ -163,34 +166,28 @@ templates:
   […]
 ```
 
-Add those protocols anywhere in your source code:
+And, to use it on a structure, just add one of the "Auto" annotation:
 
 ``` swift
-protocol AutoJSONSerializable {}
-protocol AutoJSONDeserializable {}
-
-public protocol JSONSerializable {
-    func toJSONObject() -> Any
-}
-
-protocol JSONDeserializable {
-    init?(JSONObject: Any)
-}
-```
-
-And, finally, to use it on a structure, just add one of the "Auto" protocols:
-
-``` swift
-struct Contact: AutoJSONSerializable {
+// sourcery: AutoJSONSerializable
+struct Contact {
     [...]
 }
 ```
 
+This will generate two files to add to your project:
+- `AutoJSONSerializable.generated.swift`
+- `AutoJSONDeserializable.generated.swift`
+
+You can specify the output folder for these files using the `output` option in your `.sourcery.yml`. See [Soucery documentation](https://github.com/krzysztofzablocki/Sourcery#configuration-file) for more details.
+
+If you want to provide custom `JSONSerializable` or `JSONDeserializable` implementations, just import the module `Sourcery_AutoJSONSerializable` to gain access to the protocols.
+
 ## Manual Install ##
 
 To install just copy the following source files in your project:
-  * `Sources/AutoJSONSerialization/AutoJSONSerializable.swift`
-  * `Sources/AutoJSONSerialization/AutoJSONDeserializable.swift`
+  * `Sources/AutoJSONSerialization/JSONSerializable.swift`
+  * `Sources/AutoJSONSerialization/JSONDeserializable.swift`
 
 And then copy the Templates files and configure Sourcery.
 
