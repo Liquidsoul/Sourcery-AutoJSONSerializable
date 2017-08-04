@@ -24,6 +24,7 @@ platform :mac do
     # ensure that local status is ready for release
     ensure_git_branch
     ensure_git_status_clean(show_uncommitted_changes: true)
+    pod_lib_lint
 
     # bump version number, commit change and add tag
     podspec_path = 'Sourcery-AutoJSONSerializable.podspec'
