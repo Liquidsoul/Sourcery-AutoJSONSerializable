@@ -11,7 +11,6 @@ XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
 
 ## install dependencies
 install:
-	brew bundle
 .PHONY: install
 
 ## build the project and run the tests
