@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := test
 
 SOURCERY=$(PWD)/tools/Sourcery/bin/sourcery
+SWIFTLINT=$(PWD)/tools/swiftlint/swiftlint
 
 SPM_XCODE_OPTIONS=--enable-code-coverage \
 									--xcconfig-overrides "xcode.xcconfig"
@@ -17,7 +18,7 @@ install:
 test: sourcery
 	cd Tests; $(SOURCERY)
 	swift test -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
-	swiftlint
+	$(SWIFTLINT)
 .PHONY: test
 
 ## run sourcery to generate code from the root templates
