@@ -9,10 +9,6 @@ SPM_XCODE_OPTIONS=--enable-code-coverage \
 XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
 				-scheme 'AutoJSONSerialization'
 
-## install dependencies
-install:
-.PHONY: install
-
 ## build the project and run the tests
 test: sourcery
 	cd Tests; $(SOURCERY)
@@ -51,7 +47,7 @@ xcode_test: xcode_generate
 .PHONY: xcode_test
 
 ## setup the environment and run the tests using the Xcode generated project to generate code coverage
-ci: install test xcode_test
+ci: test xcode_test
 .PHONY: ci
 
 ## release a new patch version of the pod. See `fastlane lanes` for more information
