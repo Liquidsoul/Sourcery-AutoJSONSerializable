@@ -1,10 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Delete the given output folder if it exists and replace it with the content of
 # the zip at the given URL.
 
 readonly SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
-readonly PROGNAME=$(basename $0)
+readonly PROGNAME=$(basename "$0")
 
 is_dir() {
   local dir=$1
@@ -15,8 +16,9 @@ is_dir() {
 delete_dir() {
   local dir_path=$1
 
-  is_dir $dir_path \
-    && rm -rf $dir_path
+  (is_dir "$dir_path" \
+     && rm -rf "$dir_path") \
+    || true
 }
 
 main() {
@@ -30,7 +32,11 @@ main() {
   local folder_tool_path=$1; shift
   local download_url=$1; shift
 
-  delete_dir $folder_tool_path
-  $SCRIPT_DIR/download_zip.sh $folder_tool_path $download_url
+  delete_dir "$folder_tool_path"
+  echo "test"
+  "$SCRIPT_DIR"/download_zip.sh "$folder_tool_path" "$download_url"
 }
-main $@
+
+if [ "${BASH_SOURCE[0]:-}" = "$0" ]; then
+  main "$@"
+fi

@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
 readonly VERSION=0.7.2
 readonly INSTALL_PATH=tools/Sourcery
@@ -7,6 +8,9 @@ readonly DOWNLOAD_URL=https://github.com/krzysztofzablocki/Sourcery/releases/dow
 readonly SCRIPT_DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
 main() {
-  $SCRIPT_DIR/download_tool.sh $INSTALL_PATH $DOWNLOAD_URL
+  "$SCRIPT_DIR"/download_tool.sh $INSTALL_PATH $DOWNLOAD_URL
 }
-main
+
+if [ "${BASH_SOURCE[0]:-}" = "$0" ]; then
+  main
+fi
