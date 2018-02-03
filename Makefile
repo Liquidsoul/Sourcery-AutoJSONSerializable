@@ -69,10 +69,19 @@ release_pod_major:
 	bundle exec fastlane release_pod bump_type:major
 .PHONY: release_pod_major
 
-## Replace all binary tools with the version specified in the download scripts
-download_tools:
-	scripts/download_sourcery.sh
 .PHONY: download_tools
+## Replace all binary tools with the version specified in the download scripts
+download_tools: download_sourcery download_swiftlint
+
+.PHONY: download_sourcery
+## Replace sourcery binary with the version specified in the download script
+download_sourcery:
+	scripts/download_sourcery.sh
+
+.PHONY: download_swiftlint
+## Replace swiftlint binary with the version specified in the download script
+download_swiftlint:
+	scripts/download_swiftlint.sh
 
 # taken from this gist https://gist.github.com/rcmachado/af3db315e31383502660
 ## Show this help message.
