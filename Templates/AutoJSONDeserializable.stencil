@@ -15,45 +15,53 @@ extension {{ type.name }}: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        {% macro Optional arg key %}guard {{ arg }} else {
-            throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "{{ key }}", value: JSONDictionary["{{ key }}"])
+        {% macro Optional arg type %}guard {{ arg }} else {
+            // type: {{ type }}
+            throw AutoJSONDeserializableError.typeMismatchError({{ type }}.self)
         }{% endmacro %}
         {% for variable in type.storedVariables %}
         {% set jsonKey %}{{ variable.annotations.JSONKey|default:variable.name }}{% endset %}
+        {% set rawVariableName %}{{ variable.name }}RawValue{% endset %}
+        let {{rawVariableName }} = JSONDictionary["{{ jsonKey }}"]
+        {% ifnot variable.isOptional %}
+        if {{ rawVariableName }} == nil {
+            throw AutoJSONDeserializableError.keyNotFoundError("{{ jsonKey }}")
+        }
+        {% endif %}
         {% ifnot variable.isArray %}
         {% set castType %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}{% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ variable.type.rawTypeName.name }}{% else %}{{ variable.unwrappedTypeName }}{% endif %}{% endif %}{% endset %}
         {% set itemOperation %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}.flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}.flatMap({ {{ variable.actualTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
-        {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}
+        {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable or not variable.isOptional %}
         do {
         {% endif %}
-        {% set Assignment %}let {{ variable.name }} = {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}try {% endif %}(JSONDictionary["{{ jsonKey }}"]{% if castType %} as? {{ castType }}{% endif %}){{ itemOperation }}{% endset %}
+        {% set Assignment %}let {{ variable.name }} = {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}try {% endif %}({{ rawVariableName }}{% if castType %} as? {{ castType }}{% endif %}){{ itemOperation }}{% endset %}
         {% if variable.isOptional %}
         {{ Assignment }}
         {% else %}
-        {% call Optional Assignment jsonKey %}
+        {% call Optional Assignment variable.typeName %}
         {% endif %}
         self.{{ variable.name }} = {{ variable.name }}
-        {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}
+        {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable or not variable.isOptional %}
         } catch let error as AutoJSONDeserializableError {
-            throw AutoJSONDeserializableError.nestedError(key: "{{ jsonKey }}", error: error)
+            throw error.nestedUnderKey("{{ jsonKey }}")
         }
         {% endif %}
         {% else %}
         {% set castType %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}[Any]{% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}[{{ variable.typeName.array.elementType.rawTypeName.name }}]{% else %}{{ variable.typeName }}{% endif %}{% endif %}{% endset %}
         {% set itemOperation %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}?.flatMap({{ variable.typeName.array.elementTypeName.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}?.flatMap({ {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
-        {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}
+        {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable or not variable.isOptional %}
         do {
         {% endif %}
-        {% set Assignment %}let {{ variable.name }} = {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}try {% endif %}(JSONDictionary["{{ jsonKey }}"] as? {{ castType }}){{ itemOperation }}{% endset %}
+        {% set Assignment %}let {{ variable.name }} = {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}try {% endif %}({{ rawVariableName }} as? {{ castType }}){{ itemOperation }}{% endset %}
         {% if variable.isOptional %}
         {{ Assignment }}
         {% else %}
-        {% call Optional Assignment jsonKey %}
+        {% call Optional Assignment variable.typeName %}
         {% endif %}
         self.{{ variable.name }} = {{ variable.name }}
-        {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}
+        {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable or not variable.isOptional %}
         } catch let error as AutoJSONDeserializableError {
-            throw AutoJSONDeserializableError.nestedError(key: "{{ jsonKey }}", error: error)
+            throw error.nestedUnderKey("{{ jsonKey }}")
         }
         {% endif %}
         {% endif %}

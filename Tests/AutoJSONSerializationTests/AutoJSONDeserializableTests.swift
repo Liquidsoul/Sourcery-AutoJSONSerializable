@@ -12,25 +12,29 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.name, "value")
     }
 
-    func test_singlePropertyDeserialization_misspelledKey() throws {
+    func test_singlePropertyDeserialization_misspelledKey() {
         let jsonObject: [String: Any] = ["anme": "value"]
 
         do {
             _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
-        } catch let AutoJSONDeserializableError.missingKeyOrInvalid(key, value) {
+        } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
             XCTAssertEqual(key, "name")
-            XCTAssertNil(value)
+            XCTAssertEqual(keyPath, [])
+        } catch {
+            XCTFail("Unexpected error \(error)")
         }
     }
 
-    func test_singlePropertyDeserialization_invalidValue() throws {
+    func test_singlePropertyDeserialization_invalidValue() {
         let jsonObject: [String: Any] = ["name": 13]
 
         do {
             _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
-        } catch let AutoJSONDeserializableError.missingKeyOrInvalid(key, value) {
-            XCTAssertEqual(key, "name")
-            XCTAssertEqual(value as? Int, 13)
+        } catch let AutoJSONDeserializableError.typeMismatch(type, keyPath) {
+            XCTAssertEqual(keyPath, ["name"])
+            XCTAssertTrue(type == String.self)
+        } catch {
+            XCTFail("Unexpected error \(error)")
         }
     }
 
@@ -99,8 +103,11 @@ class AutoJSONDeserializableTests: XCTestCase {
 
         do {
             _ = try JSONDeserializableProperty(JSONObject: jsonObject)
-        } catch let error as AutoJSONDeserializableError {
-            XCTAssertEqual(error.keyPath, "annotated_entity.name")
+        } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
+            XCTAssertEqual(key, "name")
+            XCTAssertEqual(keyPath, ["annotated_entity"])
+        } catch {
+            XCTFail("Unexpected error \(error)")
         }
     }
 

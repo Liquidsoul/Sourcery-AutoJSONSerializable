@@ -1,23 +1,32 @@
 public enum AutoJSONDeserializableError: Error {
-    public typealias KeyPath = [String]
+    public typealias CodingKey = String
+    public typealias KeyPath = [CodingKey]
 
     case typeMismatch(Any.Type, keyPath: KeyPath)
-    case missingKeyOrInvalid(key: String, value: Any?)
-    indirect case nestedError(key: String, error: AutoJSONDeserializableError)
+    case keyNotFound(String, keyPath: KeyPath)
 
     var keyPath: String {
         switch self {
-        case .typeMismatch(_, let keyPath):
+        case .typeMismatch(_, let keyPath), .keyNotFound(_, let keyPath):
             return keyPath.joined(separator: ".")
-        case .missingKeyOrInvalid(let key, _):
-            return key
-        case let .nestedError(key, error):
-            return key + "." + error.keyPath
+        }
+    }
+
+    public func nestedUnderKey(_ nestKey: CodingKey) -> AutoJSONDeserializableError {
+        switch self {
+        case let .typeMismatch(type, keyPath):
+            return .typeMismatch(type, keyPath: [nestKey] + keyPath)
+        case let .keyNotFound(key, keyPath):
+            return .keyNotFound(key, keyPath: [nestKey] + keyPath)
         }
     }
 
     public static func typeMismatchError(_ type: Any.Type, keyPath: KeyPath = []) -> AutoJSONDeserializableError {
         return .typeMismatch(type, keyPath: keyPath)
+    }
+
+    public static func keyNotFoundError(_ key: String, keyPath: KeyPath = []) -> AutoJSONDeserializableError {
+        return .keyNotFound(key, keyPath: keyPath)
     }
 }
 
