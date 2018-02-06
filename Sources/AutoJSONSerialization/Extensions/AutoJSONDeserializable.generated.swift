@@ -13,10 +13,14 @@ extension ArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let array = try (JSONDictionary["array"] as? [Any])?.flatMap(MultiTypesProperties.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "array", value: JSONDictionary["array"])
         }
         self.array = array
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "array", error: error)
+        }
     }
 }
 
@@ -47,10 +51,14 @@ extension DateArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let dateArray = try (JSONDictionary["dateArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "dateArray", value: JSONDictionary["dateArray"])
         }
         self.dateArray = dateArray
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "dateArray", error: error)
+        }
     }
 }
 
@@ -60,12 +68,20 @@ extension DateProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let date = try (JSONDictionary["date"]).flatMap(Date.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "date", value: JSONDictionary["date"])
         }
         self.date = date
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "date", error: error)
+        }
+        do {
         let optionalDate = try (JSONDictionary["optional_date"]).flatMap(Date.init(JSONObject:))
         self.optionalDate = optionalDate
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "optional_date", error: error)
+        }
     }
 }
 
@@ -88,16 +104,28 @@ extension EnumWithCustomSerdeProperties: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let intEnumUsingStringSerde = try (JSONDictionary["intEnumUsingStringSerde"]).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "intEnumUsingStringSerde", value: JSONDictionary["intEnumUsingStringSerde"])
         }
         self.intEnumUsingStringSerde = intEnumUsingStringSerde
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "intEnumUsingStringSerde", error: error)
+        }
+        do {
         guard let customSerdeEnum = try (JSONDictionary["customSerdeEnum"]).flatMap(CustomSerdeEnum.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "customSerdeEnum", value: JSONDictionary["customSerdeEnum"])
         }
         self.customSerdeEnum = customSerdeEnum
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "customSerdeEnum", error: error)
+        }
+        do {
         let optionalCustomSerdeEnum = try (JSONDictionary["optionalCustomSerdeEnum"]).flatMap(CustomSerdeEnum.init(JSONObject:))
         self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "optionalCustomSerdeEnum", error: error)
+        }
     }
 }
 
@@ -122,20 +150,40 @@ extension JSONDeserializableProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let entity = try (JSONDictionary["entity"]).flatMap(Entity.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "entity", value: JSONDictionary["entity"])
         }
         self.entity = entity
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "entity", error: error)
+        }
+        do {
         let optionalEntity = try (JSONDictionary["optionalEntity"]).flatMap(Entity.init(JSONObject:))
         self.optionalEntity = optionalEntity
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "optionalEntity", error: error)
+        }
+        do {
         let nilEntity = try (JSONDictionary["nilEntity"]).flatMap(Entity.init(JSONObject:))
         self.nilEntity = nilEntity
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "nilEntity", error: error)
+        }
+        do {
         guard let annotatedEntity = try (JSONDictionary["annotated_entity"]).flatMap(Entity.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "annotated_entity", value: JSONDictionary["annotated_entity"])
         }
         self.annotatedEntity = annotatedEntity
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "annotated_entity", error: error)
+        }
+        do {
         let optionalAnnotatedEntity = try (JSONDictionary["optional_annotated_entity"]).flatMap(Entity.init(JSONObject:))
         self.optionalAnnotatedEntity = optionalAnnotatedEntity
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "optional_annotated_entity", error: error)
+        }
     }
 }
 
@@ -235,10 +283,14 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let momentArray = try (JSONDictionary["momentArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "momentArray", value: JSONDictionary["momentArray"])
         }
         self.momentArray = momentArray
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "momentArray", error: error)
+        }
     }
 }
 
@@ -248,12 +300,20 @@ extension TypealiasedDateProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
         }
+        do {
         guard let momentInTime = try (JSONDictionary["momentInTime"]).flatMap(MomentInTime.init(JSONObject:)) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "momentInTime", value: JSONDictionary["momentInTime"])
         }
         self.momentInTime = momentInTime
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "momentInTime", error: error)
+        }
+        do {
         let optionalMomentInTime = try (JSONDictionary["optionalMomentInTime"]).flatMap(MomentInTime.init(JSONObject:))
         self.optionalMomentInTime = optionalMomentInTime
+        } catch let error as AutoJSONDeserializableError {
+            throw AutoJSONDeserializableError.nestedError(key: "optionalMomentInTime", error: error)
+        }
     }
 }
 

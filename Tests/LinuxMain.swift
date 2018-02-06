@@ -23,6 +23,7 @@ extension AutoJSONDeserializableTests {
     ("test_DateArrayPropertyDeserialization", test_DateArrayPropertyDeserialization),
     ("test_TypealiasedDateArrayPropertyDeserialization", test_TypealiasedDateArrayPropertyDeserialization),
     ("test_BasicTypesArrayPropertyDeserialization", test_BasicTypesArrayPropertyDeserialization),
+    ("test_that_arrayDeserializationFailsEntirely_ifOneItemCannotBeDeserialized", test_that_arrayDeserializationFailsEntirely_ifOneItemCannotBeDeserialized),
     ("test_StringEnumPropertyDeserialization", test_StringEnumPropertyDeserialization),
     ("test_IntEnumPropertyDeserialization", test_IntEnumPropertyDeserialization),
     ("test_EnumArrayPropertyDeserialization", test_EnumArrayPropertyDeserialization),

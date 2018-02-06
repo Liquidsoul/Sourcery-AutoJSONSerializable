@@ -99,9 +99,8 @@ class AutoJSONDeserializableTests: XCTestCase {
 
         do {
             _ = try JSONDeserializableProperty(JSONObject: jsonObject)
-        } catch let AutoJSONDeserializableError.missingKeyOrInvalid(key, value) {
-            XCTAssertEqual(key, "name")
-            XCTAssertNil(value)
+        } catch let error as AutoJSONDeserializableError {
+            XCTAssertEqual(error.keyPath, "annotated_entity.name")
         }
     }
 
@@ -196,6 +195,35 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.doubleArray, [1.2, 3.4])
         XCTAssertEqual(object.integerArray, [1, 2, 3, 4])
         XCTAssertEqual(object.stringArray, ["A", "B", "C"])
+    }
+
+    func test_that_arrayDeserializationFailsEntirely_ifOneItemCannotBeDeserialized() {
+        let jsonObject = [
+            "array": [
+                [
+                    "string": "value",
+                    "integer": 42,
+                    "optionalInteger": 24,
+                    "double": 66.6
+                ],
+                [
+                    "string": "failing",
+                    "integer": "42",
+                    "optionalInteger": 24,
+                    "double": 66.6
+                ],
+                [
+                    "string": "otherValue",
+                    "integer": 24,
+                    "optionalInteger": 42,
+                    "double": 9.99
+                ]
+            ]
+        ]
+
+        XCTAssertThrowsError(try ArrayProperty(JSONObject: jsonObject)) { error in
+            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "array.integer")
+        }
     }
 
     func test_StringEnumPropertyDeserialization() {
