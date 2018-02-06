@@ -10,7 +10,7 @@ extension Date: JSONDeserializable {
     public init(JSONObject: Any) throws {
         guard let dateString = JSONObject as? String,
               let date = JSONDateFormatter.date(from: dateString) else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError(String.self)
         }
         self = date
     }

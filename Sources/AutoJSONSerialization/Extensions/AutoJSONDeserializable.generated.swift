@@ -11,7 +11,7 @@ import Foundation
 extension ArrayProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let array = try (JSONDictionary["array"] as? [Any])?.flatMap(MultiTypesProperties.init(JSONObject:)) else {
@@ -28,7 +28,7 @@ extension ArrayProperty: JSONDeserializable {
 extension BasicTypesArrayProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let doubleArray = (JSONDictionary["doubleArray"] as? [Double]) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "doubleArray", value: JSONDictionary["doubleArray"])
@@ -49,7 +49,7 @@ extension BasicTypesArrayProperty: JSONDeserializable {
 extension DateArrayProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let dateArray = try (JSONDictionary["dateArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else {
@@ -66,7 +66,7 @@ extension DateArrayProperty: JSONDeserializable {
 extension DateProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let date = try (JSONDictionary["date"]).flatMap(Date.init(JSONObject:)) else {
@@ -89,7 +89,7 @@ extension DateProperty: JSONDeserializable {
 extension EnumArrayProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let enumsArray = (JSONDictionary["enumsArray"] as? [String])?.flatMap({ StringEnum(rawValue: $0) }) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "enumsArray", value: JSONDictionary["enumsArray"])
@@ -102,7 +102,7 @@ extension EnumArrayProperty: JSONDeserializable {
 extension EnumWithCustomSerdeProperties: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let intEnumUsingStringSerde = try (JSONDictionary["intEnumUsingStringSerde"]).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else {
@@ -133,7 +133,7 @@ extension EnumWithCustomSerdeProperties: JSONDeserializable {
 extension IntEnumProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let enumValue = (JSONDictionary["enumValue"] as? Int).flatMap({ IntEnum(rawValue: $0) }) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "enumValue", value: JSONDictionary["enumValue"])
@@ -148,7 +148,7 @@ extension IntEnumProperty: JSONDeserializable {
 extension JSONDeserializableProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let entity = try (JSONDictionary["entity"]).flatMap(Entity.init(JSONObject:)) else {
@@ -191,7 +191,7 @@ extension JSONDeserializableProperty: JSONDeserializable {
 extension JSONDeserializableProperty.Entity: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let name = (JSONDictionary["name"] as? String) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "name", value: JSONDictionary["name"])
@@ -204,7 +204,7 @@ extension JSONDeserializableProperty.Entity: JSONDeserializable {
 extension MultiTypesProperties: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let string = (JSONDictionary["string"] as? String) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "string", value: JSONDictionary["string"])
@@ -229,7 +229,7 @@ extension MultiTypesProperties: JSONDeserializable {
 extension OptionalProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         let name = (JSONDictionary["name"] as? String)
         self.name = name
@@ -240,7 +240,7 @@ extension OptionalProperty: JSONDeserializable {
 extension SinglePropertyNoAnnotation: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let name = (JSONDictionary["name"] as? String) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "name", value: JSONDictionary["name"])
@@ -253,7 +253,7 @@ extension SinglePropertyNoAnnotation: JSONDeserializable {
 extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let name = (JSONDictionary["label"] as? String) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "label", value: JSONDictionary["label"])
@@ -266,7 +266,7 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
 extension StringEnumProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         guard let enumValue = (JSONDictionary["enumValue"] as? String).flatMap({ StringEnum(rawValue: $0) }) else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "enumValue", value: JSONDictionary["enumValue"])
@@ -281,7 +281,7 @@ extension StringEnumProperty: JSONDeserializable {
 extension TypealiasedDateArrayProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let momentArray = try (JSONDictionary["momentArray"] as? [Any])?.flatMap(Date.init(JSONObject:)) else {
@@ -298,7 +298,7 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
 extension TypealiasedDateProperty: JSONDeserializable {
     internal init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         do {
         guard let momentInTime = try (JSONDictionary["momentInTime"]).flatMap(MomentInTime.init(JSONObject:)) else {

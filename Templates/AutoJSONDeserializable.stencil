@@ -13,7 +13,7 @@ extension {{ type.name }}: JSONDeserializable {
 {% if type.supertype|annotated:"AutoJSONDeserializable" %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
     {{ type.accessLevel }} init(JSONObject: Any) throws {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
         {% macro Optional arg key %}guard {{ arg }} else {
             throw AutoJSONDeserializableError.missingKeyOrInvalid(key: "{{ key }}", value: JSONDictionary["{{ key }}"])

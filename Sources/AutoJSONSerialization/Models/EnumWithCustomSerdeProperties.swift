@@ -7,7 +7,7 @@ enum IntEnumUsingStringSerde: Int, JSONSerializable, JSONDeserializable {
         guard let stringValue = JSONObject as? String,
             let intValue = Int(stringValue),
             let enumValue = IntEnumUsingStringSerde(rawValue: intValue) else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError(String.self)
         }
         self = enumValue
     }
@@ -23,19 +23,19 @@ enum CustomSerdeEnum: JSONSerializable, JSONDeserializable {
 
     init(JSONObject: Any) throws {
         guard let stringValue = JSONObject as? String else {
-            throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+            throw AutoJSONDeserializableError.typeMismatchError(String.self)
         }
         var components = stringValue.components(separatedBy: "|")
-        guard let type = components.first else { throw AutoJSONDeserializableError.invalidJSONObject(JSONObject) }
+        guard let type = components.first else { throw Error.contentError(stringValue) }
         components.removeFirst()
         switch type {
         case "chair": self = .chair
         case "human":
             guard let firstName = components.first, let lastName = components.last else {
-                throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+                throw Error.contentError(stringValue)
             }
             self = .human(firstName: firstName, lastName: lastName)
-        default: throw AutoJSONDeserializableError.invalidJSONObject(JSONObject)
+        default: throw Error.contentError(stringValue)
         }
     }
 
@@ -44,6 +44,10 @@ enum CustomSerdeEnum: JSONSerializable, JSONDeserializable {
         case .chair: return "chair"
         case let .human(firstName, lastName): return "human|\(firstName)|\(lastName)"
         }
+    }
+
+    enum Error: Swift.Error {
+        case contentError(String)
     }
 }
 
