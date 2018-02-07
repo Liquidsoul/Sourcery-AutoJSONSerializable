@@ -9,6 +9,11 @@ SPM_XCODE_OPTIONS=--enable-code-coverage \
 XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
 				-scheme 'AutoJSONSerialization-Package'
 
+.PHONY: install
+## install the requirements
+install:
+	bundle install
+
 ## build the project and run the tests
 test: sourcery
 	cd Tests; $(SOURCERY)
@@ -50,20 +55,25 @@ xcode_test: xcode_generate
 ci: test xcode_test
 .PHONY: ci
 
-## release a new patch version of the pod. See `fastlane lanes` for more information
-release_pod_patch:
-	bundle exec fastlane release_pod bump_type:patch
 .PHONY: release_pod_patch
+## release a new patch version of the pod. See `fastlane lanes` for more information
+release_pod_patch: check_pod_session
+	bundle exec fastlane release_pod bump_type:patch
 
-## release a new minor version of the pod. See `fastlane lanes` for more information
-release_pod_minor:
-	bundle exec fastlane release_pod bump_type:minor
 .PHONY: release_pod_minor
+## release a new minor version of the pod. See `fastlane lanes` for more information
+release_pod_minor: check_pod_session
+	bundle exec fastlane release_pod bump_type:minor
 
-## release a new major version of the pod. See `fastlane lanes` for more information
-release_pod_major:
-	bundle exec fastlane release_pod bump_type:major
 .PHONY: release_pod_major
+## release a new major version of the pod. See `fastlane lanes` for more information
+release_pod_major: check_pod_session
+	bundle exec fastlane release_pod bump_type:major
+
+.PHONY: check_pod_session
+# check if there is a registered pod session
+check_pod_session: install
+	@bundle exec pod trunk me --silent || (echo "You do not seem to have a valid session active on this device. Run 'pod trunk register' to create one."; exit 1)
 
 .PHONY: download_tools
 ## Replace all binary tools with the version specified in the download scripts
