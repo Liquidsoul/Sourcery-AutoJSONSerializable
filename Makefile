@@ -7,7 +7,7 @@ SPM_XCODE_OPTIONS=--enable-code-coverage \
 									--xcconfig-overrides "xcode.xcconfig"
 
 XCODEFLAGS=-project 'AutoJSONSerialization.xcodeproj' \
-				-scheme 'AutoJSONSerialization'
+				-scheme 'AutoJSONSerialization-Package'
 
 ## build the project and run the tests
 test: sourcery
