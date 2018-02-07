@@ -10,10 +10,13 @@ import XCTest
 extension AutoJSONDeserializableTests {
   static var allTests = [
     ("test_singlePropertyDeserialization", test_singlePropertyDeserialization),
+    ("test_singlePropertyDeserialization_misspelledKey", test_singlePropertyDeserialization_misspelledKey),
+    ("test_singlePropertyDeserialization_invalidValue", test_singlePropertyDeserialization_invalidValue),
     ("test_singleAnnotatedPropertyDeserialization", test_singleAnnotatedPropertyDeserialization),
     ("test_MultiTypesPropertiesDeserialization", test_MultiTypesPropertiesDeserialization),
     ("test_OptionalPropertyDeserialization", test_OptionalPropertyDeserialization),
     ("test_JSONDeserializablePropertyDeserialization", test_JSONDeserializablePropertyDeserialization),
+    ("test_JSONDeserializablePropertyDeserialization_misspelledNestedAttribute", test_JSONDeserializablePropertyDeserialization_misspelledNestedAttribute),
     ("test_DatePropertyDeserialization", test_DatePropertyDeserialization),
     ("test_TypealiasedDatePropertyDeserialization", test_TypealiasedDatePropertyDeserialization),
     ("test_ArrayPropertyDeserialization", test_ArrayPropertyDeserialization),
