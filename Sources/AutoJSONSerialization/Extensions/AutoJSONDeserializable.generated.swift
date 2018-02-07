@@ -42,9 +42,9 @@ extension DateArrayProperty: JSONDeserializable {
 extension DateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let date = (JSONObject["date"] ).flatMap(Date.init(JSONObject:)) else { return nil }
+        guard let date = (JSONObject["date"]).flatMap(Date.init(JSONObject:)) else { return nil }
         self.date = date
-        let optionalDate = (JSONObject["optional_date"] ).flatMap(Date.init(JSONObject:))
+        let optionalDate = (JSONObject["optional_date"]).flatMap(Date.init(JSONObject:))
         self.optionalDate = optionalDate
     }
 }
@@ -62,11 +62,11 @@ extension EnumArrayProperty: JSONDeserializable {
 extension EnumWithCustomSerdeProperties: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let intEnumUsingStringSerde = (JSONObject["intEnumUsingStringSerde"] ).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else { return nil }
+        guard let intEnumUsingStringSerde = (JSONObject["intEnumUsingStringSerde"]).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else { return nil }
         self.intEnumUsingStringSerde = intEnumUsingStringSerde
-        guard let customSerdeEnum = (JSONObject["customSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:)) else { return nil }
+        guard let customSerdeEnum = (JSONObject["customSerdeEnum"]).flatMap(CustomSerdeEnum.init(JSONObject:)) else { return nil }
         self.customSerdeEnum = customSerdeEnum
-        let optionalCustomSerdeEnum = (JSONObject["optionalCustomSerdeEnum"] ).flatMap(CustomSerdeEnum.init(JSONObject:))
+        let optionalCustomSerdeEnum = (JSONObject["optionalCustomSerdeEnum"]).flatMap(CustomSerdeEnum.init(JSONObject:))
         self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
     }
 }
@@ -86,15 +86,15 @@ extension IntEnumProperty: JSONDeserializable {
 extension JSONDeserializableProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let entity = (JSONObject["entity"] ).flatMap(Entity.init(JSONObject:)) else { return nil }
+        guard let entity = (JSONObject["entity"]).flatMap(Entity.init(JSONObject:)) else { return nil }
         self.entity = entity
-        let optionalEntity = (JSONObject["optionalEntity"] ).flatMap(Entity.init(JSONObject:))
+        let optionalEntity = (JSONObject["optionalEntity"]).flatMap(Entity.init(JSONObject:))
         self.optionalEntity = optionalEntity
-        let nilEntity = (JSONObject["nilEntity"] ).flatMap(Entity.init(JSONObject:))
+        let nilEntity = (JSONObject["nilEntity"]).flatMap(Entity.init(JSONObject:))
         self.nilEntity = nilEntity
-        guard let annotatedEntity = (JSONObject["annotated_entity"] ).flatMap(Entity.init(JSONObject:)) else { return nil }
+        guard let annotatedEntity = (JSONObject["annotated_entity"]).flatMap(Entity.init(JSONObject:)) else { return nil }
         self.annotatedEntity = annotatedEntity
-        let optionalAnnotatedEntity = (JSONObject["optional_annotated_entity"] ).flatMap(Entity.init(JSONObject:))
+        let optionalAnnotatedEntity = (JSONObject["optional_annotated_entity"]).flatMap(Entity.init(JSONObject:))
         self.optionalAnnotatedEntity = optionalAnnotatedEntity
     }
 }
@@ -176,9 +176,9 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
 extension TypealiasedDateProperty: JSONDeserializable {
     internal init?(JSONObject: Any) {
         guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        guard let momentInTime = (JSONObject["momentInTime"] ).flatMap(MomentInTime.init(JSONObject:)) else { return nil }
+        guard let momentInTime = (JSONObject["momentInTime"]).flatMap(MomentInTime.init(JSONObject:)) else { return nil }
         self.momentInTime = momentInTime
-        let optionalMomentInTime = (JSONObject["optionalMomentInTime"] ).flatMap(MomentInTime.init(JSONObject:))
+        let optionalMomentInTime = (JSONObject["optionalMomentInTime"]).flatMap(MomentInTime.init(JSONObject:))
         self.optionalMomentInTime = optionalMomentInTime
     }
 }
