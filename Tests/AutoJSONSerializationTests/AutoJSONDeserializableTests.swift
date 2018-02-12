@@ -19,7 +19,7 @@ class AutoJSONDeserializableTests: XCTestCase {
             _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
         } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
             XCTAssertEqual(key, "name")
-            XCTAssertEqual(keyPath, [])
+            XCTAssertEqual(keyPath.stringValue, "$")
         } catch {
             XCTFail("Unexpected error \(error)")
         }
@@ -31,7 +31,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         do {
             _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
         } catch let AutoJSONDeserializableError.typeMismatch(type, keyPath) {
-            XCTAssertEqual(keyPath, ["name"])
+            XCTAssertEqual(keyPath.stringValue, "$.name")
             XCTAssertTrue(type == String.self)
         } catch {
             XCTFail("Unexpected error \(error)")
@@ -105,7 +105,7 @@ class AutoJSONDeserializableTests: XCTestCase {
             _ = try JSONDeserializableProperty(JSONObject: jsonObject)
         } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
             XCTAssertEqual(key, "name")
-            XCTAssertEqual(keyPath, ["annotated_entity"])
+            XCTAssertEqual(keyPath.stringValue, "$.annotated_entity")
         } catch {
             XCTFail("Unexpected error \(error)")
         }
@@ -229,7 +229,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         ]
 
         XCTAssertThrowsError(try ArrayProperty(JSONObject: jsonObject)) { error in
-            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "array.integer")
+            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "$.array.integer")
         }
     }
 

@@ -1,6 +1,21 @@
 public enum AutoJSONDeserializableError: Error {
     public typealias CodingKey = String
-    public typealias KeyPath = [CodingKey]
+    public struct KeyPath {
+        public var path = [CodingKey]()
+
+        public func prepending(key: CodingKey) -> KeyPath {
+            var keyPath = self
+            keyPath.path = [key] + keyPath.path
+            return keyPath
+        }
+
+        var stringValue: String {
+            if path.isEmpty {
+                return "$"
+            }
+            return "$." + path.joined(separator: ".")
+        }
+    }
 
     case typeMismatch(Any.Type, keyPath: KeyPath)
     case keyNotFound(String, keyPath: KeyPath)
@@ -8,16 +23,16 @@ public enum AutoJSONDeserializableError: Error {
     var keyPath: String {
         switch self {
         case .typeMismatch(_, let keyPath), .keyNotFound(_, let keyPath):
-            return keyPath.joined(separator: ".")
+            return keyPath.stringValue
         }
     }
 
     public func nestedUnderKey(_ nestKey: CodingKey) -> AutoJSONDeserializableError {
         switch self {
         case let .typeMismatch(type, keyPath):
-            return .typeMismatch(type, keyPath: [nestKey] + keyPath)
+            return .typeMismatch(type, keyPath: keyPath.prepending(key: nestKey))
         case let .keyNotFound(key, keyPath):
-            return .keyNotFound(key, keyPath: [nestKey] + keyPath)
+            return .keyNotFound(key, keyPath: keyPath.prepending(key: nestKey))
         }
     }
 
