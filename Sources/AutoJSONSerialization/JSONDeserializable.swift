@@ -21,12 +21,12 @@ public enum AutoJSONDeserializableError: Error {
         }
     }
 
-    public static func typeMismatchError(_ type: Any.Type, keyPath: KeyPath = []) -> AutoJSONDeserializableError {
-        return .typeMismatch(type, keyPath: keyPath)
+    public static func typeMismatchError(_ type: Any.Type) -> AutoJSONDeserializableError {
+        return .typeMismatch(type, keyPath: KeyPath())
     }
 
-    public static func keyNotFoundError(_ key: String, keyPath: KeyPath = []) -> AutoJSONDeserializableError {
-        return .keyNotFound(key, keyPath: keyPath)
+    public static func keyNotFoundError(_ key: String) -> AutoJSONDeserializableError {
+        return .keyNotFound(key, keyPath: KeyPath())
     }
 }
 
