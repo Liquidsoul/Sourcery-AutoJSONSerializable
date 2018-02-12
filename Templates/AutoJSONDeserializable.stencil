@@ -43,7 +43,7 @@ extension {{ type.name }}: JSONDeserializable {
         self.{{ variable.name }} = {{ variable.name }}
         {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable or not variable.isOptional %}
         } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey("{{ jsonKey }}")
+            throw error.nestedUnderKey(.name("{{ jsonKey }}"))
         }
         {% endif %}
         {% else %}
@@ -61,7 +61,7 @@ extension {{ type.name }}: JSONDeserializable {
         self.{{ variable.name }} = {{ variable.name }}
         {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable or not variable.isOptional %}
         } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey("{{ jsonKey }}")
+            throw error.nestedUnderKey(.name("{{ jsonKey }}"))
         }
         {% endif %}
         {% endif %}

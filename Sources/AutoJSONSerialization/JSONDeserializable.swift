@@ -1,5 +1,18 @@
 public enum AutoJSONDeserializableError: Error {
-    public typealias CodingKey = String
+    public enum CodingKey {
+        case name(String)
+        case index(Int)
+
+        func toString() -> String {
+            switch self {
+            case .name(let key):
+                return key
+            case .index(let index):
+                return "\(index)"
+            }
+        }
+    }
+
     public struct KeyPath {
         public var path = [CodingKey]()
 
@@ -13,7 +26,7 @@ public enum AutoJSONDeserializableError: Error {
             if path.isEmpty {
                 return "$"
             }
-            return "$." + path.joined(separator: ".")
+            return "$." + path.map { $0.toString() }.joined(separator: ".")
         }
     }
 
