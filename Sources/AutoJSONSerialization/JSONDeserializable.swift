@@ -6,15 +6,23 @@ public enum AutoJSONDeserializableError: Error {
         func toString() -> String {
             switch self {
             case .name(let key):
-                return key
+                return "." + key
             case .index(let index):
-                return "\(index)"
+                return "[\(index)]"
             }
         }
     }
 
     public struct KeyPath {
         public var path = [CodingKey]()
+
+        public init(path: [CodingKey] = []) {
+            self.path = path
+        }
+
+        public init(key: CodingKey) {
+            self.path = [key]
+        }
 
         public func prepending(key: CodingKey) -> KeyPath {
             var keyPath = self
@@ -26,7 +34,7 @@ public enum AutoJSONDeserializableError: Error {
             if path.isEmpty {
                 return "$"
             }
-            return "$." + path.map { $0.toString() }.joined(separator: ".")
+            return "$" + path.map { $0.toString() }.joined()
         }
     }
 
@@ -49,12 +57,13 @@ public enum AutoJSONDeserializableError: Error {
         }
     }
 
-    public static func typeMismatchError(_ type: Any.Type) -> AutoJSONDeserializableError {
-        return .typeMismatch(type, keyPath: KeyPath())
+    public static func typeMismatchError(_ type: Any.Type,
+                                         keyPath: KeyPath = KeyPath()) -> AutoJSONDeserializableError {
+        return .typeMismatch(type, keyPath: keyPath)
     }
 
-    public static func keyNotFoundError(_ key: String) -> AutoJSONDeserializableError {
-        return .keyNotFound(key, keyPath: KeyPath())
+    public static func keyNotFoundError(_ key: String, keyPath: KeyPath = KeyPath()) -> AutoJSONDeserializableError {
+        return .keyNotFound(key, keyPath: keyPath)
     }
 }
 

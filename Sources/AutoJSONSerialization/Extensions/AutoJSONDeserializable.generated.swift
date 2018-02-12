@@ -13,18 +13,25 @@ extension ArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let arrayRawValue = JSONDictionary["array"]
-        if arrayRawValue == nil {
+        if let arrayRawValue = JSONDictionary["array"], !(arrayRawValue is NSNull) {
+            do {
+                guard let castedArray = arrayRawValue as? [Any] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([MultiTypesProperties].self)
+                }
+                self.array = try castedArray.enumerated().map { indexElementTuple -> MultiTypesProperties in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    do {
+                        return try MultiTypesProperties(JSONObject: element)
+                    } catch let error as AutoJSONDeserializableError {
+                        throw error.nestedUnderKey(.index(index))
+                    }
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("array"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("array")
-        }
-        do {
-        guard let array = try (arrayRawValue as? [Any])?.flatMap(MultiTypesProperties.init(JSONObject:)) else {
-            // type: [MultiTypesProperties]
-            throw AutoJSONDeserializableError.typeMismatchError([MultiTypesProperties].self)
-        }
-        self.array = array
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("array"))
         }
     }
 }
@@ -35,44 +42,29 @@ extension BasicTypesArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let doubleArrayRawValue = JSONDictionary["doubleArray"]
-        if doubleArrayRawValue == nil {
+        if let doubleArrayRawValue = JSONDictionary["doubleArray"], !(doubleArrayRawValue is NSNull) {
+            guard let doubleArray = doubleArrayRawValue as? [Double] else {
+                throw AutoJSONDeserializableError.typeMismatchError([Double].self, keyPath: .init(key: .name("doubleArray")))
+            }
+            self.doubleArray = doubleArray
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("doubleArray")
         }
-        do {
-        guard let doubleArray = (doubleArrayRawValue as? [Double]) else {
-            // type: [Double]
-            throw AutoJSONDeserializableError.typeMismatchError([Double].self)
-        }
-        self.doubleArray = doubleArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("doubleArray"))
-        }
-        let integerArrayRawValue = JSONDictionary["integerArray"]
-        if integerArrayRawValue == nil {
+        if let integerArrayRawValue = JSONDictionary["integerArray"], !(integerArrayRawValue is NSNull) {
+            guard let integerArray = integerArrayRawValue as? [Int] else {
+                throw AutoJSONDeserializableError.typeMismatchError([Int].self, keyPath: .init(key: .name("integerArray")))
+            }
+            self.integerArray = integerArray
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("integerArray")
         }
-        do {
-        guard let integerArray = (integerArrayRawValue as? [Int]) else {
-            // type: [Int]
-            throw AutoJSONDeserializableError.typeMismatchError([Int].self)
-        }
-        self.integerArray = integerArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("integerArray"))
-        }
-        let stringArrayRawValue = JSONDictionary["stringArray"]
-        if stringArrayRawValue == nil {
+        if let stringArrayRawValue = JSONDictionary["stringArray"], !(stringArrayRawValue is NSNull) {
+            guard let stringArray = stringArrayRawValue as? [String] else {
+                throw AutoJSONDeserializableError.typeMismatchError([String].self, keyPath: .init(key: .name("stringArray")))
+            }
+            self.stringArray = stringArray
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("stringArray")
-        }
-        do {
-        guard let stringArray = (stringArrayRawValue as? [String]) else {
-            // type: [String]
-            throw AutoJSONDeserializableError.typeMismatchError([String].self)
-        }
-        self.stringArray = stringArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("stringArray"))
         }
     }
 }
@@ -83,18 +75,25 @@ extension DateArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let dateArrayRawValue = JSONDictionary["dateArray"]
-        if dateArrayRawValue == nil {
+        if let dateArrayRawValue = JSONDictionary["dateArray"], !(dateArrayRawValue is NSNull) {
+            do {
+                guard let castedArray = dateArrayRawValue as? [Any] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([Date].self)
+                }
+                self.dateArray = try castedArray.enumerated().map { indexElementTuple -> Date in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    do {
+                        return try Date(JSONObject: element)
+                    } catch let error as AutoJSONDeserializableError {
+                        throw error.nestedUnderKey(.index(index))
+                    }
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("dateArray"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("dateArray")
-        }
-        do {
-        guard let dateArray = try (dateArrayRawValue as? [Any])?.flatMap(Date.init(JSONObject:)) else {
-            // type: [Date]
-            throw AutoJSONDeserializableError.typeMismatchError([Date].self)
-        }
-        self.dateArray = dateArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("dateArray"))
         }
     }
 }
@@ -105,25 +104,25 @@ extension DateProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let dateRawValue = JSONDictionary["date"]
-        if dateRawValue == nil {
+        if let dateRawValue = JSONDictionary["date"], !(dateRawValue is NSNull) {
+            do {
+                let date = try Date(JSONObject: dateRawValue)
+                self.date = date
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("date"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("date")
         }
-        do {
-        guard let date = try (dateRawValue).flatMap(Date.init(JSONObject:)) else {
-            // type: Date
-            throw AutoJSONDeserializableError.typeMismatchError(Date.self)
-        }
-        self.date = date
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("date"))
-        }
-        let optionalDateRawValue = JSONDictionary["optional_date"]
-        do {
-        let optionalDate = try (optionalDateRawValue).flatMap(Date.init(JSONObject:))
-        self.optionalDate = optionalDate
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("optional_date"))
+        if let optionalDateRawValue = JSONDictionary["optional_date"], !(optionalDateRawValue is NSNull) {
+            do {
+                let optionalDate = try Date(JSONObject: optionalDateRawValue)
+                self.optionalDate = optionalDate
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("optional_date"))
+            }
+        } else {
+            self.optionalDate = nil
         }
     }
 }
@@ -134,18 +133,25 @@ extension EnumArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let enumsArrayRawValue = JSONDictionary["enumsArray"]
-        if enumsArrayRawValue == nil {
+        if let enumsArrayRawValue = JSONDictionary["enumsArray"], !(enumsArrayRawValue is NSNull) {
+            do {
+                // StringEnum
+                guard let castedArray = enumsArrayRawValue as? [String] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([String].self)
+                }
+                self.enumsArray = try castedArray.enumerated().map { indexElementTuple -> StringEnum in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    guard let enumValue = StringEnum(rawValue: element) else {
+                        throw AutoJSONDeserializableError.typeMismatchError(StringEnum.self, keyPath: .init(key: .index(index)))
+                    }
+                    return enumValue
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("enumsArray"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("enumsArray")
-        }
-        do {
-        guard let enumsArray = (enumsArrayRawValue as? [String])?.flatMap({ StringEnum(rawValue: $0) }) else {
-            // type: [StringEnum]
-            throw AutoJSONDeserializableError.typeMismatchError([StringEnum].self)
-        }
-        self.enumsArray = enumsArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("enumsArray"))
         }
     }
 }
@@ -156,38 +162,35 @@ extension EnumWithCustomSerdeProperties: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let intEnumUsingStringSerdeRawValue = JSONDictionary["intEnumUsingStringSerde"]
-        if intEnumUsingStringSerdeRawValue == nil {
+        if let intEnumUsingStringSerdeRawValue = JSONDictionary["intEnumUsingStringSerde"], !(intEnumUsingStringSerdeRawValue is NSNull) {
+            do {
+                let intEnumUsingStringSerde = try IntEnumUsingStringSerde(JSONObject: intEnumUsingStringSerdeRawValue)
+                self.intEnumUsingStringSerde = intEnumUsingStringSerde
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("intEnumUsingStringSerde"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("intEnumUsingStringSerde")
         }
-        do {
-        guard let intEnumUsingStringSerde = try (intEnumUsingStringSerdeRawValue).flatMap(IntEnumUsingStringSerde.init(JSONObject:)) else {
-            // type: IntEnumUsingStringSerde
-            throw AutoJSONDeserializableError.typeMismatchError(IntEnumUsingStringSerde.self)
-        }
-        self.intEnumUsingStringSerde = intEnumUsingStringSerde
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("intEnumUsingStringSerde"))
-        }
-        let customSerdeEnumRawValue = JSONDictionary["customSerdeEnum"]
-        if customSerdeEnumRawValue == nil {
+        if let customSerdeEnumRawValue = JSONDictionary["customSerdeEnum"], !(customSerdeEnumRawValue is NSNull) {
+            do {
+                let customSerdeEnum = try CustomSerdeEnum(JSONObject: customSerdeEnumRawValue)
+                self.customSerdeEnum = customSerdeEnum
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("customSerdeEnum"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("customSerdeEnum")
         }
-        do {
-        guard let customSerdeEnum = try (customSerdeEnumRawValue).flatMap(CustomSerdeEnum.init(JSONObject:)) else {
-            // type: CustomSerdeEnum
-            throw AutoJSONDeserializableError.typeMismatchError(CustomSerdeEnum.self)
-        }
-        self.customSerdeEnum = customSerdeEnum
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("customSerdeEnum"))
-        }
-        let optionalCustomSerdeEnumRawValue = JSONDictionary["optionalCustomSerdeEnum"]
-        do {
-        let optionalCustomSerdeEnum = try (optionalCustomSerdeEnumRawValue).flatMap(CustomSerdeEnum.init(JSONObject:))
-        self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("optionalCustomSerdeEnum"))
+        if let optionalCustomSerdeEnumRawValue = JSONDictionary["optionalCustomSerdeEnum"], !(optionalCustomSerdeEnumRawValue is NSNull) {
+            do {
+                let optionalCustomSerdeEnum = try CustomSerdeEnum(JSONObject: optionalCustomSerdeEnumRawValue)
+                self.optionalCustomSerdeEnum = optionalCustomSerdeEnum
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("optionalCustomSerdeEnum"))
+            }
+        } else {
+            self.optionalCustomSerdeEnum = nil
         }
     }
 }
@@ -198,22 +201,24 @@ extension IntEnumProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let enumValueRawValue = JSONDictionary["enumValue"]
-        if enumValueRawValue == nil {
+        if let enumValueRawValue = JSONDictionary["enumValue"], !(enumValueRawValue is NSNull) {
+            guard let castedVar = enumValueRawValue as? Int,
+                  let enumValue = IntEnum(rawValue: castedVar) else {
+                throw AutoJSONDeserializableError.typeMismatchError(IntEnum.self, keyPath: .init(key: .name("enumValue")))
+            }
+            self.enumValue = enumValue
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("enumValue")
         }
-        do {
-        guard let enumValue = (enumValueRawValue as? Int).flatMap({ IntEnum(rawValue: $0) }) else {
-            // type: IntEnum
-            throw AutoJSONDeserializableError.typeMismatchError(IntEnum.self)
+        if let optionalEnumValueRawValue = JSONDictionary["optionalEnumValue"], !(optionalEnumValueRawValue is NSNull) {
+            guard let castedVar = optionalEnumValueRawValue as? Int,
+                  let optionalEnumValue = IntEnum(rawValue: castedVar) else {
+                throw AutoJSONDeserializableError.typeMismatchError(IntEnum.self, keyPath: .init(key: .name("optionalEnumValue")))
+            }
+            self.optionalEnumValue = optionalEnumValue
+        } else {
+            self.optionalEnumValue = nil
         }
-        self.enumValue = enumValue
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("enumValue"))
-        }
-        let optionalEnumValueRawValue = JSONDictionary["optionalEnumValue"]
-        let optionalEnumValue = (optionalEnumValueRawValue as? Int).flatMap({ IntEnum(rawValue: $0) })
-        self.optionalEnumValue = optionalEnumValue
     }
 }
 
@@ -223,52 +228,55 @@ extension JSONDeserializableProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let entityRawValue = JSONDictionary["entity"]
-        if entityRawValue == nil {
+        if let entityRawValue = JSONDictionary["entity"], !(entityRawValue is NSNull) {
+            do {
+                let entity = try Entity(JSONObject: entityRawValue)
+                self.entity = entity
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("entity"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("entity")
         }
-        do {
-        guard let entity = try (entityRawValue).flatMap(Entity.init(JSONObject:)) else {
-            // type: Entity
-            throw AutoJSONDeserializableError.typeMismatchError(Entity.self)
+        if let optionalEntityRawValue = JSONDictionary["optionalEntity"], !(optionalEntityRawValue is NSNull) {
+            do {
+                let optionalEntity = try Entity(JSONObject: optionalEntityRawValue)
+                self.optionalEntity = optionalEntity
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("optionalEntity"))
+            }
+        } else {
+            self.optionalEntity = nil
         }
-        self.entity = entity
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("entity"))
+        if let nilEntityRawValue = JSONDictionary["nilEntity"], !(nilEntityRawValue is NSNull) {
+            do {
+                let nilEntity = try Entity(JSONObject: nilEntityRawValue)
+                self.nilEntity = nilEntity
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("nilEntity"))
+            }
+        } else {
+            self.nilEntity = nil
         }
-        let optionalEntityRawValue = JSONDictionary["optionalEntity"]
-        do {
-        let optionalEntity = try (optionalEntityRawValue).flatMap(Entity.init(JSONObject:))
-        self.optionalEntity = optionalEntity
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("optionalEntity"))
-        }
-        let nilEntityRawValue = JSONDictionary["nilEntity"]
-        do {
-        let nilEntity = try (nilEntityRawValue).flatMap(Entity.init(JSONObject:))
-        self.nilEntity = nilEntity
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("nilEntity"))
-        }
-        let annotatedEntityRawValue = JSONDictionary["annotated_entity"]
-        if annotatedEntityRawValue == nil {
+        if let annotatedEntityRawValue = JSONDictionary["annotated_entity"], !(annotatedEntityRawValue is NSNull) {
+            do {
+                let annotatedEntity = try Entity(JSONObject: annotatedEntityRawValue)
+                self.annotatedEntity = annotatedEntity
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("annotated_entity"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("annotated_entity")
         }
-        do {
-        guard let annotatedEntity = try (annotatedEntityRawValue).flatMap(Entity.init(JSONObject:)) else {
-            // type: Entity
-            throw AutoJSONDeserializableError.typeMismatchError(Entity.self)
-        }
-        self.annotatedEntity = annotatedEntity
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("annotated_entity"))
-        }
-        let optionalAnnotatedEntityRawValue = JSONDictionary["optional_annotated_entity"]
-        do {
-        let optionalAnnotatedEntity = try (optionalAnnotatedEntityRawValue).flatMap(Entity.init(JSONObject:))
-        self.optionalAnnotatedEntity = optionalAnnotatedEntity
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("optional_annotated_entity"))
+        if let optionalAnnotatedEntityRawValue = JSONDictionary["optional_annotated_entity"], !(optionalAnnotatedEntityRawValue is NSNull) {
+            do {
+                let optionalAnnotatedEntity = try Entity(JSONObject: optionalAnnotatedEntityRawValue)
+                self.optionalAnnotatedEntity = optionalAnnotatedEntity
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("optional_annotated_entity"))
+            }
+        } else {
+            self.optionalAnnotatedEntity = nil
         }
     }
 }
@@ -279,18 +287,13 @@ extension JSONDeserializableProperty.Entity: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let nameRawValue = JSONDictionary["name"]
-        if nameRawValue == nil {
+        if let nameRawValue = JSONDictionary["name"], !(nameRawValue is NSNull) {
+            guard let name = nameRawValue as? String else {
+                throw AutoJSONDeserializableError.typeMismatchError(String.self, keyPath: .init(key: .name("name")))
+            }
+            self.name = name
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("name")
-        }
-        do {
-        guard let name = (nameRawValue as? String) else {
-            // type: String
-            throw AutoJSONDeserializableError.typeMismatchError(String.self)
-        }
-        self.name = name
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("name"))
         }
     }
 }
@@ -301,51 +304,46 @@ extension MultiTypesProperties: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let stringRawValue = JSONDictionary["string"]
-        if stringRawValue == nil {
+        if let stringRawValue = JSONDictionary["string"], !(stringRawValue is NSNull) {
+            guard let string = stringRawValue as? String else {
+                throw AutoJSONDeserializableError.typeMismatchError(String.self, keyPath: .init(key: .name("string")))
+            }
+            self.string = string
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("string")
         }
-        do {
-        guard let string = (stringRawValue as? String) else {
-            // type: String
-            throw AutoJSONDeserializableError.typeMismatchError(String.self)
-        }
-        self.string = string
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("string"))
-        }
-        let integerRawValue = JSONDictionary["integer"]
-        if integerRawValue == nil {
+        if let integerRawValue = JSONDictionary["integer"], !(integerRawValue is NSNull) {
+            guard let integer = integerRawValue as? Int else {
+                throw AutoJSONDeserializableError.typeMismatchError(Int.self, keyPath: .init(key: .name("integer")))
+            }
+            self.integer = integer
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("integer")
         }
-        do {
-        guard let integer = (integerRawValue as? Int) else {
-            // type: Int
-            throw AutoJSONDeserializableError.typeMismatchError(Int.self)
+        if let optionalIntegerRawValue = JSONDictionary["optionalInteger"], !(optionalIntegerRawValue is NSNull) {
+            guard let optionalInteger = optionalIntegerRawValue as? Int else {
+                throw AutoJSONDeserializableError.typeMismatchError(Int.self, keyPath: .init(key: .name("optionalInteger")))
+            }
+            self.optionalInteger = optionalInteger
+        } else {
+            self.optionalInteger = nil
         }
-        self.integer = integer
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("integer"))
-        }
-        let optionalIntegerRawValue = JSONDictionary["optionalInteger"]
-        let optionalInteger = (optionalIntegerRawValue as? Int)
-        self.optionalInteger = optionalInteger
-        let doubleRawValue = JSONDictionary["double"]
-        if doubleRawValue == nil {
+        if let doubleRawValue = JSONDictionary["double"], !(doubleRawValue is NSNull) {
+            guard let double = doubleRawValue as? Double else {
+                throw AutoJSONDeserializableError.typeMismatchError(Double.self, keyPath: .init(key: .name("double")))
+            }
+            self.double = double
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("double")
         }
-        do {
-        guard let double = (doubleRawValue as? Double) else {
-            // type: Double
-            throw AutoJSONDeserializableError.typeMismatchError(Double.self)
+        if let optionalDoubleRawValue = JSONDictionary["optionalDouble"], !(optionalDoubleRawValue is NSNull) {
+            guard let optionalDouble = optionalDoubleRawValue as? Double else {
+                throw AutoJSONDeserializableError.typeMismatchError(Double.self, keyPath: .init(key: .name("optionalDouble")))
+            }
+            self.optionalDouble = optionalDouble
+        } else {
+            self.optionalDouble = nil
         }
-        self.double = double
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("double"))
-        }
-        let optionalDoubleRawValue = JSONDictionary["optionalDouble"]
-        let optionalDouble = (optionalDoubleRawValue as? Double)
-        self.optionalDouble = optionalDouble
     }
 }
 
@@ -355,9 +353,14 @@ extension OptionalProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let nameRawValue = JSONDictionary["name"]
-        let name = (nameRawValue as? String)
-        self.name = name
+        if let nameRawValue = JSONDictionary["name"], !(nameRawValue is NSNull) {
+            guard let name = nameRawValue as? String else {
+                throw AutoJSONDeserializableError.typeMismatchError(String.self, keyPath: .init(key: .name("name")))
+            }
+            self.name = name
+        } else {
+            self.name = nil
+        }
     }
 }
 
@@ -367,18 +370,13 @@ extension SinglePropertyNoAnnotation: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let nameRawValue = JSONDictionary["name"]
-        if nameRawValue == nil {
+        if let nameRawValue = JSONDictionary["name"], !(nameRawValue is NSNull) {
+            guard let name = nameRawValue as? String else {
+                throw AutoJSONDeserializableError.typeMismatchError(String.self, keyPath: .init(key: .name("name")))
+            }
+            self.name = name
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("name")
-        }
-        do {
-        guard let name = (nameRawValue as? String) else {
-            // type: String
-            throw AutoJSONDeserializableError.typeMismatchError(String.self)
-        }
-        self.name = name
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("name"))
         }
     }
 }
@@ -389,18 +387,13 @@ extension SinglePropertyWithKeyPathAnnotation: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let nameRawValue = JSONDictionary["label"]
-        if nameRawValue == nil {
+        if let nameRawValue = JSONDictionary["label"], !(nameRawValue is NSNull) {
+            guard let name = nameRawValue as? String else {
+                throw AutoJSONDeserializableError.typeMismatchError(String.self, keyPath: .init(key: .name("label")))
+            }
+            self.name = name
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("label")
-        }
-        do {
-        guard let name = (nameRawValue as? String) else {
-            // type: String
-            throw AutoJSONDeserializableError.typeMismatchError(String.self)
-        }
-        self.name = name
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("label"))
         }
     }
 }
@@ -411,22 +404,24 @@ extension StringEnumProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let enumValueRawValue = JSONDictionary["enumValue"]
-        if enumValueRawValue == nil {
+        if let enumValueRawValue = JSONDictionary["enumValue"], !(enumValueRawValue is NSNull) {
+            guard let castedVar = enumValueRawValue as? String,
+                  let enumValue = StringEnum(rawValue: castedVar) else {
+                throw AutoJSONDeserializableError.typeMismatchError(StringEnum.self, keyPath: .init(key: .name("enumValue")))
+            }
+            self.enumValue = enumValue
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("enumValue")
         }
-        do {
-        guard let enumValue = (enumValueRawValue as? String).flatMap({ StringEnum(rawValue: $0) }) else {
-            // type: StringEnum
-            throw AutoJSONDeserializableError.typeMismatchError(StringEnum.self)
+        if let optionalEnumValueRawValue = JSONDictionary["optionalEnumValue"], !(optionalEnumValueRawValue is NSNull) {
+            guard let castedVar = optionalEnumValueRawValue as? String,
+                  let optionalEnumValue = StringEnum(rawValue: castedVar) else {
+                throw AutoJSONDeserializableError.typeMismatchError(StringEnum.self, keyPath: .init(key: .name("optionalEnumValue")))
+            }
+            self.optionalEnumValue = optionalEnumValue
+        } else {
+            self.optionalEnumValue = nil
         }
-        self.enumValue = enumValue
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("enumValue"))
-        }
-        let optionalEnumValueRawValue = JSONDictionary["optionalEnumValue"]
-        let optionalEnumValue = (optionalEnumValueRawValue as? String).flatMap({ StringEnum(rawValue: $0) })
-        self.optionalEnumValue = optionalEnumValue
     }
 }
 
@@ -436,18 +431,25 @@ extension TypealiasedDateArrayProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let momentArrayRawValue = JSONDictionary["momentArray"]
-        if momentArrayRawValue == nil {
+        if let momentArrayRawValue = JSONDictionary["momentArray"], !(momentArrayRawValue is NSNull) {
+            do {
+                guard let castedArray = momentArrayRawValue as? [Any] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([Date].self)
+                }
+                self.momentArray = try castedArray.enumerated().map { indexElementTuple -> Date in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    do {
+                        return try Date(JSONObject: element)
+                    } catch let error as AutoJSONDeserializableError {
+                        throw error.nestedUnderKey(.index(index))
+                    }
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("momentArray"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("momentArray")
-        }
-        do {
-        guard let momentArray = try (momentArrayRawValue as? [Any])?.flatMap(Date.init(JSONObject:)) else {
-            // type: [Moment]
-            throw AutoJSONDeserializableError.typeMismatchError([Moment].self)
-        }
-        self.momentArray = momentArray
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("momentArray"))
         }
     }
 }
@@ -458,25 +460,25 @@ extension TypealiasedDateProperty: JSONDeserializable {
         guard let JSONDictionary = JSONObject as? [String: Any] else {
             throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
         }
-        let momentInTimeRawValue = JSONDictionary["momentInTime"]
-        if momentInTimeRawValue == nil {
+        if let momentInTimeRawValue = JSONDictionary["momentInTime"], !(momentInTimeRawValue is NSNull) {
+            do {
+                let momentInTime = try MomentInTime(JSONObject: momentInTimeRawValue)
+                self.momentInTime = momentInTime
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("momentInTime"))
+            }
+        } else {
             throw AutoJSONDeserializableError.keyNotFoundError("momentInTime")
         }
-        do {
-        guard let momentInTime = try (momentInTimeRawValue).flatMap(MomentInTime.init(JSONObject:)) else {
-            // type: MomentInTime
-            throw AutoJSONDeserializableError.typeMismatchError(MomentInTime.self)
-        }
-        self.momentInTime = momentInTime
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("momentInTime"))
-        }
-        let optionalMomentInTimeRawValue = JSONDictionary["optionalMomentInTime"]
-        do {
-        let optionalMomentInTime = try (optionalMomentInTimeRawValue).flatMap(MomentInTime.init(JSONObject:))
-        self.optionalMomentInTime = optionalMomentInTime
-        } catch let error as AutoJSONDeserializableError {
-            throw error.nestedUnderKey(.name("optionalMomentInTime"))
+        if let optionalMomentInTimeRawValue = JSONDictionary["optionalMomentInTime"], !(optionalMomentInTimeRawValue is NSNull) {
+            do {
+                let optionalMomentInTime = try MomentInTime(JSONObject: optionalMomentInTimeRawValue)
+                self.optionalMomentInTime = optionalMomentInTime
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("optionalMomentInTime"))
+            }
+        } else {
+            self.optionalMomentInTime = nil
         }
     }
 }

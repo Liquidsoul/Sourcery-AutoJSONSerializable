@@ -229,7 +229,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         ]
 
         XCTAssertThrowsError(try ArrayProperty(JSONObject: jsonObject)) { error in
-            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "$.array.integer")
+            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "$.array[1].integer")
         }
     }
 
