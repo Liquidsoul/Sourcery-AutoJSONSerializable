@@ -5,17 +5,43 @@ class AutoJSONDeserializableTests: XCTestCase {
     func test_singlePropertyDeserialization() {
         let jsonObject: [String: Any] = ["name": "value"]
 
-        guard let object = SinglePropertyNoAnnotation(JSONObject: jsonObject) else {
+        guard let object = try? SinglePropertyNoAnnotation(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
         XCTAssertEqual(object.name, "value")
     }
 
+    func test_singlePropertyDeserialization_misspelledKey() {
+        let jsonObject: [String: Any] = ["anme": "value"]
+
+        do {
+            _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
+        } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
+            XCTAssertEqual(key, "name")
+            XCTAssertEqual(keyPath.stringValue, "$")
+        } catch {
+            XCTFail("Unexpected error \(error)")
+        }
+    }
+
+    func test_singlePropertyDeserialization_invalidValue() {
+        let jsonObject: [String: Any] = ["name": 13]
+
+        do {
+            _ = try SinglePropertyNoAnnotation(JSONObject: jsonObject)
+        } catch let AutoJSONDeserializableError.typeMismatch(type, keyPath) {
+            XCTAssertEqual(keyPath.stringValue, "$.name")
+            XCTAssertTrue(type == String.self)
+        } catch {
+            XCTFail("Unexpected error \(error)")
+        }
+    }
+
     func test_singleAnnotatedPropertyDeserialization() {
         let jsonObject: [String: Any] = ["label": "value"]
 
-        guard let object = SinglePropertyWithKeyPathAnnotation(JSONObject: jsonObject) else {
+        guard let object = try? SinglePropertyWithKeyPathAnnotation(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -29,7 +55,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "double": 66.6
         ]
 
-        guard let object = MultiTypesProperties(JSONObject: jsonObject) else {
+        guard let object = try? MultiTypesProperties(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -41,7 +67,7 @@ class AutoJSONDeserializableTests: XCTestCase {
     func test_OptionalPropertyDeserialization() {
         let jsonObject: [String: Any] = ["name": NSNull()]
 
-        guard let object = OptionalProperty(JSONObject: jsonObject) else {
+        guard let object = try? OptionalProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -56,7 +82,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "optional_annotated_entity": ["name": "optionalAnnotatedValue"]
         ]
 
-        guard let object = JSONDeserializableProperty(JSONObject: jsonObject) else {
+        guard let object = try? JSONDeserializableProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -67,13 +93,31 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertNil(object.nilEntity)
     }
 
+    func test_JSONDeserializablePropertyDeserialization_misspelledNestedAttribute() throws {
+        let jsonObject: [String: Any] = [
+            "entity": ["name": "value"],
+            "optionalEntity": ["name": "optionalValue"],
+            "annotated_entity": ["anme": "annotatedValue"],
+            "optional_annotated_entity": ["name": "optionalAnnotatedValue"]
+        ]
+
+        do {
+            _ = try JSONDeserializableProperty(JSONObject: jsonObject)
+        } catch let AutoJSONDeserializableError.keyNotFound(key, keyPath) {
+            XCTAssertEqual(key, "name")
+            XCTAssertEqual(keyPath.stringValue, "$.annotated_entity")
+        } catch {
+            XCTFail("Unexpected error \(error)")
+        }
+    }
+
     func test_DatePropertyDeserialization() {
         let jsonObject: [String: Any] = [
           "date": "1985-04-12T23:20:50Z",
           "optional_date": "1996-12-19T16:39:57-08:00"
         ]
 
-        guard let object = DateProperty(JSONObject: jsonObject) else {
+        guard let object = try? DateProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -87,7 +131,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "optionalMomentInTime": "1996-12-19T16:39:57-08:00"
         ]
 
-        guard let object = TypealiasedDateProperty(JSONObject: jsonObject) else {
+        guard let object = try? TypealiasedDateProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -107,7 +151,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           ]
         ]
 
-        guard let object = ArrayProperty(JSONObject: jsonObject), let firstItem = object.array.first else {
+        guard let object = try? ArrayProperty(JSONObject: jsonObject), let firstItem = object.array.first else {
             XCTFail()
             return
         }
@@ -123,7 +167,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         ]
         let expectedItem = Date(timeIntervalSince1970: 482196050)
 
-        guard let object = DateArrayProperty(JSONObject: jsonObject), let firstItem = object.dateArray.first else {
+        guard let object = try? DateArrayProperty(JSONObject: jsonObject), let firstItem = object.dateArray.first else {
             XCTFail()
             return
         }
@@ -136,7 +180,7 @@ class AutoJSONDeserializableTests: XCTestCase {
         ]
         let expectedItem = Date(timeIntervalSince1970: 482196050)
 
-        guard let object = TypealiasedDateArrayProperty(JSONObject: jsonObject),
+        guard let object = try? TypealiasedDateArrayProperty(JSONObject: jsonObject),
               let firstItem = object.momentArray.first else {
             XCTFail()
             return
@@ -151,7 +195,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "stringArray": ["A", "B", "C"]
         ]
 
-        guard let object = BasicTypesArrayProperty(JSONObject: jsonObject) else {
+        guard let object = try? BasicTypesArrayProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -160,13 +204,42 @@ class AutoJSONDeserializableTests: XCTestCase {
         XCTAssertEqual(object.stringArray, ["A", "B", "C"])
     }
 
+    func test_that_arrayDeserializationFailsEntirely_ifOneItemCannotBeDeserialized() {
+        let jsonObject = [
+            "array": [
+                [
+                    "string": "value",
+                    "integer": 42,
+                    "optionalInteger": 24,
+                    "double": 66.6
+                ],
+                [
+                    "string": "failing",
+                    "integer": "42",
+                    "optionalInteger": 24,
+                    "double": 66.6
+                ],
+                [
+                    "string": "otherValue",
+                    "integer": 24,
+                    "optionalInteger": 42,
+                    "double": 9.99
+                ]
+            ]
+        ]
+
+        XCTAssertThrowsError(try ArrayProperty(JSONObject: jsonObject)) { error in
+            XCTAssertEqual((error as? AutoJSONDeserializableError)?.keyPath, "$.array[1].integer")
+        }
+    }
+
     func test_StringEnumPropertyDeserialization() {
         let jsonObject: Any = [
           "enumValue": "sameName",
           "optionalEnumValue": "assigned_value"
         ]
 
-        guard let object = StringEnumProperty(JSONObject: jsonObject) else {
+        guard let object = try? StringEnumProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -180,7 +253,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "optionalEnumValue": 4
         ]
 
-        guard let object = IntEnumProperty(JSONObject: jsonObject) else {
+        guard let object = try? IntEnumProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -193,7 +266,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "enumsArray": ["sameName", "assigned_value"]
         ]
 
-        guard let object = EnumArrayProperty(JSONObject: jsonObject) else {
+        guard let object = try? EnumArrayProperty(JSONObject: jsonObject) else {
             XCTFail()
             return
         }
@@ -208,7 +281,7 @@ class AutoJSONDeserializableTests: XCTestCase {
           "optionalCustomSerdeEnum": "chair"
         ]
 
-        guard let object = EnumWithCustomSerdeProperties(JSONObject: jsonObject) else {
+        guard let object = try? EnumWithCustomSerdeProperties(JSONObject: jsonObject) else {
             XCTFail()
             return
         }

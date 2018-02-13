@@ -11,30 +11,90 @@ import Sourcery_AutoJSONSerializable
 // MARK: - {{ type.name }} AutoJSONDeserializable
 extension {{ type.name }}: JSONDeserializable {
 {% if type.supertype|annotated:"AutoJSONDeserializable" %} THIS WONT COMPILE, WE DONT SUPPORT INHERITANCE for AutoJSONDeserializable {% endif %}
-    {{ type.accessLevel }} init?(JSONObject: Any) {
-        guard let JSONObject = JSONObject as? [String: Any] else { return nil }
-        {% macro Optional arg %}guard {{ arg }} else { return nil }{% endmacro %}
+    {{ type.accessLevel }} init(JSONObject: Any) throws {
+        guard let JSONDictionary = JSONObject as? [String: Any] else {
+            throw AutoJSONDeserializableError.typeMismatchError([String: Any].self)
+        }
+        {% macro Optional arg type %}guard {{ arg }} else {
+            throw AutoJSONDeserializableError.typeMismatchError({{ type }}.self)
+        }{% endmacro %}
         {% for variable in type.storedVariables %}
-        {% ifnot variable.isArray %}
-        {% set castType %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}{% else %}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}{{ variable.type.rawTypeName.name }}{% else %}{{ variable.unwrappedTypeName }}{% endif %}{% endif %}{% endset %}
-        {% set itemOperation %}{% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}.flatMap({{ variable.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.type.kind == "enum" and variable.type.rawTypeName %}.flatMap({ {{ variable.actualTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
-        {% set Assignment %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.JSONKey|default:variable.name }}"]{% if castType %} as? {{ castType }}{% endif %}){{ itemOperation }}{% endset %}
-        {% if variable.isOptional %}
-        {{ Assignment }}
-        {% else %}
-        {% call Optional Assignment %}
-        {% endif %}
-        {% else %}
-        {% set castType %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}[Any]{% else %}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}[{{ variable.typeName.array.elementType.rawTypeName.name }}]{% else %}{{ variable.typeName }}{% endif %}{% endif %}{% endset %}
-        {% set itemOperation %}{% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}?.flatMap({{ variable.typeName.array.elementTypeName.unwrappedTypeName }}.init(JSONObject:)){%else%}{% if variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}?.flatMap({ {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(rawValue: $0) }){% endif %}{% endif %}{% endset %}
-        {% set Assignment %}let {{ variable.name }} = (JSONObject["{{ variable.annotations.JSONKey|default:variable.name }}"] as? {{ castType }}){{ itemOperation }}{% endset %}
-        {% if variable.isOptional %}
-        {{ Assignment }}
-        {% else %}
-        {% call Optional Assignment %}
-        {% endif %}
-        {% endif %}
-        self.{{ variable.name }} = {{ variable.name }}
+        {% set jsonKey %}{{ variable.annotations.JSONKey|default:variable.name }}{% endset %}
+        {% set rawVariableName %}{{ variable.name }}RawValue{% endset %}
+        if let {{rawVariableName }} = JSONDictionary["{{ jsonKey }}"], !({{ rawVariableName }} is NSNull) {
+            {% ifnot variable.isArray %}
+            {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}
+            do {
+                let {{ variable.name }} = try {{ variable.unwrappedTypeName }}(JSONObject: {{ rawVariableName }})
+                self.{{ variable.name }} = {{ variable.name }}
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("{{ jsonKey }}"))
+            }
+            {% elif variable.type.kind == "enum" and variable.type.rawTypeName %}
+            guard {% if variable.type.rawTypeName.name %}let castedVar = {{ rawVariableName }} as? {{ variable.type.rawTypeName.name }},
+                  {% endif %}let {{ variable.name }} = {{ variable.actualTypeName.unwrappedTypeName }}(rawValue: {% if variable.type.rawTypeName.name %}castedVar{% else %}{{ rawVariableName }}{% endif %}) else {
+                throw AutoJSONDeserializableError.typeMismatchError({{ variable.actualTypeName.unwrappedTypeName }}.self, keyPath: .init(key: .name("{{ jsonKey}}")))
+            }
+            self.{{ variable.name }} = {{ variable.name }}
+            {% elif variable.unwrappedTypeName %}
+            guard let {{ variable.name }} = {{ rawVariableName }} as? {{ variable.unwrappedTypeName }} else {
+                throw AutoJSONDeserializableError.typeMismatchError({{  variable.unwrappedTypeName  }}.self, keyPath: .init(key: .name("{{ jsonKey}}")))
+            }
+            self.{{ variable.name }} = {{ variable.name }}
+            {% else %}
+            self.{{ variable.name }} = {{ rawVariableName }}
+            {% endif %}
+            {% else %}
+            {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}
+            do {
+                guard let castedArray = {{ rawVariableName }} as? [Any] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([{{ variable.typeName.array.elementTypeName.unwrappedTypeName }}].self)
+                }
+                self.{{ variable.name }} = try castedArray.enumerated().map { indexElementTuple -> {{ variable.typeName.array.elementTypeName.unwrappedTypeName }} in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    do {
+                        return try {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(JSONObject: element)
+                    } catch let error as AutoJSONDeserializableError {
+                        throw error.nestedUnderKey(.index(index))
+                    }
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("{{ jsonKey }}"))
+            }
+            {% elif variable.typeName.array.elementType.kind == "enum" and variable.typeName.array.elementType.rawTypeName %}
+            do {
+                // {{ variable.typeName.array.elementType.name }}
+                guard let castedArray = {{ rawVariableName }} as? [{{ variable.typeName.array.elementType.rawTypeName.name }}] else {
+                    throw AutoJSONDeserializableError.typeMismatchError([{{ variable.typeName.array.elementType.rawTypeName.name }}].self)
+                }
+                self.{{ variable.name }} = try castedArray.enumerated().map { indexElementTuple -> {{ variable.typeName.array.elementType.name }} in
+                    let index = indexElementTuple.0
+                    let element = indexElementTuple.1
+                    guard let enumValue = {{ variable.typeName.array.elementTypeName.unwrappedTypeName }}(rawValue: element) else {
+                        throw AutoJSONDeserializableError.typeMismatchError({{ variable.typeName.array.elementType.name }}.self, keyPath: .init(key: .index(index)))
+                    }
+                    return enumValue
+                }
+            } catch let error as AutoJSONDeserializableError {
+                throw error.nestedUnderKey(.name("{{ jsonKey }}"))
+            }
+            {% elif variable.typeName %}
+            guard let {{ variable.name }} = {{ rawVariableName }} as? {{ variable.typeName }} else {
+                throw AutoJSONDeserializableError.typeMismatchError({{  variable.typeName  }}.self, keyPath: .init(key: .name("{{ jsonKey}}")))
+            }
+            self.{{ variable.name }} = {{ variable.name }}
+            {% else %}
+            self.{{ variable.name }} = {{ rawVariableName }}
+            {% endif %}
+            {% endif %}
+        } else {
+            {% if variable.isOptional %}
+            self.{{ variable.name }} = nil
+            {% else %}
+            throw AutoJSONDeserializableError.keyNotFoundError("{{ jsonKey }}")
+            {% endif %}
+        }
         {% endfor %}
     }
 }

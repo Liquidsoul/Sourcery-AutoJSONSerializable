@@ -3,9 +3,13 @@ enum IntEnumUsingStringSerde: Int, JSONSerializable, JSONDeserializable {
     case two
     case six = 6
 
-    init?(JSONObject: Any) {
-        guard let stringValue = JSONObject as? String, let intValue = Int(stringValue) else { return nil }
-        self.init(rawValue: intValue)
+    init(JSONObject: Any) throws {
+        guard let stringValue = JSONObject as? String,
+            let intValue = Int(stringValue),
+            let enumValue = IntEnumUsingStringSerde(rawValue: intValue) else {
+            throw AutoJSONDeserializableError.typeMismatchError(String.self)
+        }
+        self = enumValue
     }
 
     func toJSONObject() -> Any {
@@ -17,21 +21,21 @@ enum CustomSerdeEnum: JSONSerializable, JSONDeserializable {
     case chair
     case human(firstName: String, lastName: String)
 
-    init?(JSONObject: Any) {
+    init(JSONObject: Any) throws {
         guard let stringValue = JSONObject as? String else {
-            return nil
+            throw AutoJSONDeserializableError.typeMismatchError(String.self)
         }
         var components = stringValue.components(separatedBy: "|")
-        guard let type = components.first else { return nil }
+        guard let type = components.first else { throw Error.contentError(stringValue) }
         components.removeFirst()
         switch type {
         case "chair": self = .chair
         case "human":
             guard let firstName = components.first, let lastName = components.last else {
-                return nil
+                throw Error.contentError(stringValue)
             }
             self = .human(firstName: firstName, lastName: lastName)
-        default: return nil
+        default: throw Error.contentError(stringValue)
         }
     }
 
@@ -40,6 +44,10 @@ enum CustomSerdeEnum: JSONSerializable, JSONDeserializable {
         case .chair: return "chair"
         case let .human(firstName, lastName): return "human|\(firstName)|\(lastName)"
         }
+    }
+
+    enum Error: Swift.Error {
+        case contentError(String)
     }
 }
 
