@@ -1,3 +1,7 @@
+public protocol JSONDeserializable {
+    init(JSONObject: Any) throws
+}
+
 public enum AutoJSONDeserializableError: Error {
     public enum CodingKey {
         case name(String)
@@ -67,6 +71,15 @@ public enum AutoJSONDeserializableError: Error {
     }
 }
 
-public protocol JSONDeserializable {
-    init(JSONObject: Any) throws
+import Foundation
+
+extension AutoJSONDeserializableError: LocalizedError {
+    public var failureReason: String? {
+        switch self {
+        case let .typeMismatch(type, keyPath):
+            return "Incorrect type (expected \(type)) at path \(keyPath.stringValue)"
+        case let .keyNotFound(key, keyPath):
+            return "Key '\(key)' not found at path \(keyPath.stringValue)"
+        }
+    }
 }
