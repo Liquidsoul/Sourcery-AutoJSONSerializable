@@ -22,6 +22,10 @@ extension {{ type.name }}: JSONDeserializable {
         {% set jsonKey %}{{ variable.annotations.JSONKey|default:variable.name }}{% endset %}
         {% set rawVariableName %}{{ variable.name }}RawValue{% endset %}
         if let {{rawVariableName }} = JSONDictionary["{{ jsonKey }}"], !({{ rawVariableName }} is NSNull) {
+            {% if jsonKey == "momentArray" %}
+            // variable: {{ variable }}
+            // variable.isArray: {{ variable.isArray }}
+            {% endif %}
             {% ifnot variable.isArray %}
             {% if variable.type|annotated:"AutoJSONDeserializable" or variable.type.based.JSONDeserializable %}
             do {
@@ -45,6 +49,10 @@ extension {{ type.name }}: JSONDeserializable {
             self.{{ variable.name }} = {{ rawVariableName }}
             {% endif %}
             {% else %}
+            {% if jsonKey == "momentArray" %}
+            // variable.typeName: {{ variable.typeName }}
+            // variable.typeName.array.elementType: {{ variable.typeName.array.elementType }}
+            {% endif %}
             {% if variable.typeName.array.elementType|annotated:"AutoJSONDeserializable" or variable.typeName.array.elementType.based.JSONDeserializable %}
             do {
                 guard let castedArray = {{ rawVariableName }} as? [Any] else {

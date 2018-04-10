@@ -17,6 +17,7 @@ install:
 ## build the project and run the tests
 test: sourcery
 	cd Tests; $(SOURCERY)
+	git --no-pager diff
 	swift test -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
 	$(SWIFTLINT)
 .PHONY: test
