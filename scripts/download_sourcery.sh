@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly VERSION=0.11.1
+readonly VERSION=0.11.2
 readonly INSTALL_PATH=tools/Sourcery
 readonly DOWNLOAD_URL=https://github.com/krzysztofzablocki/Sourcery/releases/download/$VERSION/Sourcery-$VERSION.zip
 

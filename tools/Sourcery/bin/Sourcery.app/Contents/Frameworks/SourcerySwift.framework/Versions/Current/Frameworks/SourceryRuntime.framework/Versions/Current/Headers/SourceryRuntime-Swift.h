@@ -896,9 +896,9 @@ SWIFT_CLASS("_TtC15SourceryRuntime15MethodParameter")
 /// :nodoc:
 @property (nonatomic) id _Nullable __parserData;
 /// :nodoc:
-- (nonnull instancetype)initWithArgumentLabel:(NSString * _Nullable)argumentLabel name:(NSString * _Nonnull)name typeName:(TypeName * _Nonnull)typeName type:(Type * _Nullable)type defaultValue:(NSString * _Nullable)defaultValue annotations:(NSDictionary<NSString *, NSObject *> * _Nonnull)annotations inout:(BOOL)inout OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithArgumentLabel:(NSString * _Nullable)argumentLabel name:(NSString * _Nonnull)name typeName:(TypeName * _Nonnull)typeName type:(Type * _Nullable)type defaultValue:(NSString * _Nullable)defaultValue annotations:(NSDictionary<NSString *, NSObject *> * _Nonnull)annotations isInout:(BOOL)isInout OBJC_DESIGNATED_INITIALIZER;
 /// :nodoc:
-- (nonnull instancetype)initWithName:(NSString * _Nonnull)name typeName:(TypeName * _Nonnull)typeName type:(Type * _Nullable)type defaultValue:(NSString * _Nullable)defaultValue annotations:(NSDictionary<NSString *, NSObject *> * _Nonnull)annotations inout:(BOOL)inout OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithName:(NSString * _Nonnull)name typeName:(TypeName * _Nonnull)typeName type:(Type * _Nullable)type defaultValue:(NSString * _Nullable)defaultValue annotations:(NSDictionary<NSString *, NSObject *> * _Nonnull)annotations isInout:(BOOL)isInout OBJC_DESIGNATED_INITIALIZER;
 /// :nodoc:
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 /// :nodoc:
