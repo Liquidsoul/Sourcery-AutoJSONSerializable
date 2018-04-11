@@ -17,6 +17,9 @@ install:
 ## build the project and run the tests
 test: sourcery
 	cd Tests; $(SOURCERY)
+	@echo "XCODE_DEFAULT_TOOLCHAIN_OVERRIDE: ${XCODE_DEFAULT_TOOLCHAIN_OVERRIDE}"
+	@echo "TOOLCHAIN_DIR: ${TOOLCHAIN_DIR}"
+	@echo "xcrun: `xcrun -find swift`"
 	git --no-pager diff
 	swift test -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
 	$(SWIFTLINT)
